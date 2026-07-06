@@ -6,3 +6,6 @@
 
 # Shell scripts must stay LF (CRLF breaks the shebang on Linux/macOS).
 *.sh text eol=lf
+
+# Binary assets
+*.png binary
