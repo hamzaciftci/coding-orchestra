@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/social-preview.png" alt="Coding Orchestra — 11 professional software-engineering skills for Claude Code" width="100%">
+</p>
+
 # 🎻 Coding Orchestra
 
 **A battle-tested collection of 11 professional software-engineering skills for [Claude Code](https://claude.com/claude-code).**

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/social-preview.png" alt="Coding Orchestra — Claude Code için 11 profesyonel yazılım geliştirme skill'i" width="100%">
+</p>
+
 # 🎻 Coding Orchestra
 
 **[Claude Code](https://claude.com/claude-code) için 11 profesyonel yazılım geliştirme skill'inden oluşan, sahada test edilmiş bir koleksiyon.**
