@@ -3,6 +3,17 @@
 All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.0] — 2026-07-06
+
+### Added
+- **English skill set** (`skills-en/`) — full English translations of all 11 skills,
+  alongside the Turkish originals in `skills/`.
+- Language selection in the installers: `--en` / `-En` (English) and `--tr` /
+  `-Lang tr` (Turkish, default).
+
+### Changed
+- READMEs (EN + TR) document both language sets and the new installer flags.
+
 ## [1.0.0] — 2026-07-06
 
 ### Added

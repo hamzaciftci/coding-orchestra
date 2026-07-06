@@ -5,6 +5,7 @@
 Claude'u disiplinli bir kıdemli mühendislik ekibine dönüştürür. Her skill belirli bir uzman rolünün (backend mimarı, güvenlik denetçisi, QA mühendisi, ürün tasarımcısı) çalışma prensiplerini kodlar. Ayrıca bir projeyi analizden production'a kadar uçtan uca yürüten bir **ana orkestratör** içerir.
 
 > 🇬🇧 Read in English → [README.md](README.md)
+> 📝 Skill'ler hem **Türkçe (`skills/`) hem İngilizce (`skills-en/`)** olarak gelir — kurulumda dilini seçersin.
 
 ---
 
@@ -49,21 +50,32 @@ Her skill aynı yapıyı izler: **Amaç · Rol · Çalışma Prensipleri · İş
 ```bash
 git clone https://github.com/hamzaciftci/coding-orchestra.git
 cd coding-orchestra
-./install.sh
+./install.sh           # Türkçe skill'ler (İngilizce için --en ekle)
 ```
 
 **Windows (PowerShell):**
 ```powershell
 git clone https://github.com/hamzaciftci/coding-orchestra.git
 cd coding-orchestra
-./install.ps1
+./install.ps1          # Türkçe skill'ler (İngilizce için -En ekle)
 ```
 
 Kurulum scripti her skill'i kişisel Claude Code skill klasörüne (`~/.claude/skills/`) kopyalar; böylece **tüm** projelerinde kullanılabilir olurlar.
 
+**Kurulum bayrakları:**
+
+| Bayrak (sh / ps1) | Etki |
+|---|---|
+| `--tr` / `-Lang tr` | Türkçe skill seti (`skills/`, varsayılan) |
+| `--en` / `-En` | İngilizce skill seti (`skills-en/`) |
+| `--project` / `-Project` | `./.claude/skills` içine kurar (sadece bu proje) |
+| `--dir PATH` / `-Dir PATH` | Özel bir `.claude/skills` konumuna kurar |
+
+> **Tek** dil seç — İngilizce ve Türkçe setler aynı skill adlarını paylaşır, ikisi birden `~/.claude/skills/` içinde duramaz.
+
 ### Manuel kurulum
 
-`skills/` altındaki her klasörü `~/.claude/skills/` içine kopyala:
+`skills/` (Türkçe) veya `skills-en/` (İngilizce) altındaki her klasörü `~/.claude/skills/` içine kopyala:
 
 ```bash
 cp -r skills/* ~/.claude/skills/

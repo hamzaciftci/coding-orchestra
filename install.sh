@@ -1,23 +1,28 @@
 #!/usr/bin/env bash
 #
 # Coding Orchestra — installer for macOS / Linux
-# Copies every skill in ./skills into your personal Claude Code skills folder.
+# Copies every skill into your personal Claude Code skills folder.
 #
 # Usage:
-#   ./install.sh              # install to ~/.claude/skills (global, all projects)
+#   ./install.sh              # Turkish skills → ~/.claude/skills (global)
+#   ./install.sh --en         # English skills (skills-en/)
+#   ./install.sh --lang tr    # explicit language (tr = default, en)
 #   ./install.sh --project    # install to ./.claude/skills (current project only)
 #   ./install.sh --dir PATH   # install to a custom .claude/skills parent
 #
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SRC="$SCRIPT_DIR/skills"
 
 TARGET_PARENT="$HOME/.claude"
 MODE="global"
+LANG_CODE="tr"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --en)      LANG_CODE="en"; shift ;;
+    --tr)      LANG_CODE="tr"; shift ;;
+    --lang)    LANG_CODE="$2"; shift 2 ;;
     --project) TARGET_PARENT="$(pwd)/.claude"; MODE="project"; shift ;;
     --dir)     TARGET_PARENT="${2%/}/.claude"; MODE="custom"; shift 2 ;;
     -h|--help)
@@ -25,6 +30,12 @@ while [[ $# -gt 0 ]]; do
     *) echo "Unknown option: $1" >&2; exit 1 ;;
   esac
 done
+
+case "$LANG_CODE" in
+  tr) SRC="$SCRIPT_DIR/skills" ;;
+  en) SRC="$SCRIPT_DIR/skills-en" ;;
+  *)  echo "Unknown language: $LANG_CODE (use tr or en)" >&2; exit 1 ;;
+esac
 
 TARGET="$TARGET_PARENT/skills"
 

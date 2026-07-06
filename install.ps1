@@ -1,22 +1,29 @@
 <#
   Coding Orchestra — installer for Windows (PowerShell)
-  Copies every skill in .\skills into your personal Claude Code skills folder.
+  Copies every skill into your personal Claude Code skills folder.
 
   Usage:
-    ./install.ps1               # install to ~/.claude/skills (global, all projects)
+    ./install.ps1               # Turkish skills -> ~/.claude/skills (global)
+    ./install.ps1 -En           # English skills (skills-en\)
+    ./install.ps1 -Lang tr      # explicit language (tr = default, en)
     ./install.ps1 -Project      # install to .\.claude\skills (current project only)
     ./install.ps1 -Dir PATH     # install to a custom .claude\skills parent
 #>
 [CmdletBinding()]
 param(
   [switch]$Project,
-  [string]$Dir
+  [string]$Dir,
+  [switch]$En,
+  [ValidateSet("tr","en")]
+  [string]$Lang = "tr"
 )
 
 $ErrorActionPreference = "Stop"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Src = Join-Path $ScriptDir "skills"
+if ($En) { $Lang = "en" }
+$SrcName = if ($Lang -eq "en") { "skills-en" } else { "skills" }
+$Src = Join-Path $ScriptDir $SrcName
 
 if ($Project) {
   $TargetParent = Join-Path (Get-Location) ".claude"; $Mode = "project"

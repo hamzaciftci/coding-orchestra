@@ -5,7 +5,7 @@
 Turn Claude into a disciplined senior engineering team. Each skill encodes the working principles of a specific expert role — backend architect, security auditor, QA engineer, product designer — plus a master orchestrator that runs an entire project from analysis to production-ready delivery.
 
 > 🇹🇷 Türkçe okumak için → [README.tr.md](README.tr.md)
-> 📝 The skill files themselves are written in **Turkish**. Claude applies them regardless of the language you prompt in. English translations are a welcome contribution — see [CONTRIBUTING](CONTRIBUTING.md).
+> 📝 The skills ship in **both English (`skills-en/`) and Turkish (`skills/`)** — pick your language at install time.
 
 ---
 
@@ -50,29 +50,40 @@ Each skill follows the same structure: **Purpose · Role · Working Principles �
 ```bash
 git clone https://github.com/hamzaciftci/coding-orchestra.git
 cd coding-orchestra
-./install.sh
+./install.sh --en      # English skills  (omit --en for Turkish)
 ```
 
 **Windows (PowerShell):**
 ```powershell
 git clone https://github.com/hamzaciftci/coding-orchestra.git
 cd coding-orchestra
-./install.ps1
+./install.ps1 -En      # English skills  (omit -En for Turkish)
 ```
 
 The installer copies every skill into your personal Claude Code skills folder (`~/.claude/skills/`), so they're available in **all** your projects.
 
+**Installer flags:**
+
+| Flag (sh / ps1) | Effect |
+|---|---|
+| `--en` / `-En` | Install the English skill set (`skills-en/`) |
+| `--tr` / `-Lang tr` | Install the Turkish skill set (`skills/`, default) |
+| `--project` / `-Project` | Install into `./.claude/skills` (this project only) |
+| `--dir PATH` / `-Dir PATH` | Install into a custom `.claude/skills` parent |
+
+> Pick **one** language — the English and Turkish sets share the same skill names, so they can't both live in `~/.claude/skills/` at once.
+
 ### Manual install
 
-Copy each folder from `skills/` into `~/.claude/skills/`:
+Copy each folder from `skills-en/` (or `skills/` for Turkish) into `~/.claude/skills/`:
 
 ```bash
-cp -r skills/* ~/.claude/skills/
+cp -r skills-en/* ~/.claude/skills/
 ```
 
 Or install a single skill:
 ```bash
-cp -r skills/security-audit ~/.claude/skills/
+cp -r skills-en/security-audit ~/.claude/skills/
 ```
 
 ### Project-scoped install
@@ -134,10 +145,13 @@ The `description` tells Claude *when* to reach for the skill; the body tells it 
 
 ```
 coding-orchestra/
-├── skills/
+├── skills-en/          # English skill set (11 skills)
 │   ├── general-coding/SKILL.md
-│   ├── backend-engineering/SKILL.md
-│   ├── ... (11 skills total)
+│   ├── ...
+│   └── production-delivery/SKILL.md
+├── skills/             # Turkish skill set (11 skills)
+│   ├── general-coding/SKILL.md
+│   ├── ...
 │   └── production-delivery/SKILL.md
 ├── install.sh          # macOS / Linux installer
 ├── install.ps1         # Windows installer
