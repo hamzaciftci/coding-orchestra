@@ -2,6 +2,13 @@
 
 **[Claude Code](https://claude.com/claude-code) için 11 profesyonel yazılım geliştirme skill'inden oluşan, sahada test edilmiş bir koleksiyon.**
 
+[![Release](https://img.shields.io/github/v/release/hamzaciftci/coding-orchestra?color=6E56CF)](https://github.com/hamzaciftci/coding-orchestra/releases)
+[![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-green.svg)](LICENSE)
+[![Skill](https://img.shields.io/badge/skill-11-6E56CF)](#11-skill)
+[![Diller](https://img.shields.io/badge/skill-TR%20%2B%20EN-blue)](#kurulum)
+[![Claude Code için](https://img.shields.io/badge/hedef-Claude%20Code-D97757)](https://claude.com/claude-code)
+[![Katkıya Açık](https://img.shields.io/badge/PR-hoş%20geldin-brightgreen.svg)](CONTRIBUTING.md)
+
 Claude'u disiplinli bir kıdemli mühendislik ekibine dönüştürür. Her skill belirli bir uzman rolünün (backend mimarı, güvenlik denetçisi, QA mühendisi, ürün tasarımcısı) çalışma prensiplerini kodlar. Ayrıca bir projeyi analizden production'a kadar uçtan uca yürüten bir **ana orkestratör** içerir.
 
 > 🇬🇧 Read in English → [README.md](README.md)

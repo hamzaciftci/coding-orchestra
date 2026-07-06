@@ -2,6 +2,13 @@
 
 **A battle-tested collection of 11 professional software-engineering skills for [Claude Code](https://claude.com/claude-code).**
 
+[![Release](https://img.shields.io/github/v/release/hamzaciftci/coding-orchestra?color=6E56CF)](https://github.com/hamzaciftci/coding-orchestra/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Skills](https://img.shields.io/badge/skills-11-6E56CF)](#the-11-skills)
+[![Languages](https://img.shields.io/badge/skills-EN%20%2B%20TR-blue)](#installation)
+[![Made for Claude Code](https://img.shields.io/badge/made%20for-Claude%20Code-D97757)](https://claude.com/claude-code)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 Turn Claude into a disciplined senior engineering team. Each skill encodes the working principles of a specific expert role — backend architect, security auditor, QA engineer, product designer — plus a master orchestrator that runs an entire project from analysis to production-ready delivery.
 
 > 🇹🇷 Türkçe okumak için → [README.tr.md](README.tr.md)
