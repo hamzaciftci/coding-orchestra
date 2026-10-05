@@ -13,6 +13,9 @@
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-D97757)](https://agentskills.io)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
+> [!IMPORTANT]
+> **Coding Orchestra has been rebuilt — this is v2.** The eleven long rulebooks of v1 are now seven lean, portable Agent Skills with on-demand references, helper scripts and measured results, and they work in both Claude Code and Codex. [What changed](#what-changed-in-v2) · [Upgrading from v1](#upgrading-from-v1) · [Results](evals/RESULTS.md)
+
 Seven skills that give a coding agent what it does not already have when it works on a Next.js / serverless / PostgreSQL project: the failure modes specific to that stack, the boundaries that matter (what needs your approval, what must never be printed), the shape of a useful deliverable, and small scripts that make an audit start from a complete inventory. One of the seven conducts an end-to-end production-readiness engagement using the others.
 
 > 🇹🇷 Türkçe için → [README.tr.md](README.tr.md)

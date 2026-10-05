@@ -3,7 +3,7 @@
 All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [2.0.0] — unreleased
+## [2.0.0] — 2026-10-05
 
 A redesign for current models and for the Agent Skills standard. See the README for the
 reasoning and `evals/RESULTS.md` for measurements.

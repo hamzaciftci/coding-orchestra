@@ -13,6 +13,9 @@
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-D97757)](https://agentskills.io)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
+> [!IMPORTANT]
+> **Coding Orchestra baştan yenilendi — bu sürüm v2.** v1'in on bir uzun kural kitabı; ihtiyaç halinde yüklenen reference'lar, yardımcı script'ler ve ölçülmüş sonuçlarla gelen yedi yalın, taşınabilir Agent Skill'e dönüştü ve artık hem Claude Code'da hem Codex'te çalışıyor. [Ne değişti](#v2de-ne-değişti) · [v1'den geçiş](#v1den-geçiş) · [Sonuçlar](evals/RESULTS.md)
+
 Yedi skill, bir coding agent'a Next.js / serverless / PostgreSQL projesinde çalışırken zaten bilmediği şeyleri verir: bu stack'e özgü hata modları, önemli sınırlar (neyin onayınızı gerektirdiği, neyin asla yazdırılmaması gerektiği), işe yarar bir çıktının biçimi ve denetimi eksiksiz bir envanterle başlatan küçük script'ler. Yedi skill'den biri, diğerlerini kullanarak uçtan uca bir production'a hazırlık çalışmasını yönetir.
 
 > 🇬🇧 English → [README.md](README.md)
