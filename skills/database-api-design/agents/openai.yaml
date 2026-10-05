@@ -1,0 +1,4 @@
+interface:
+  display_name: "Database & API Design"
+  short_description: "Schema and contract changes that keep data and clients intact"
+  default_prompt: "Plan this schema change as a safe staged migration and show me the SQL before applying anything."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Testing & QA"
+  short_description: "Risk-first tests for auth, payments, webhooks and critical flows"
+  default_prompt: "Write a risk-based test plan for this project and show me the gaps before adding tests."

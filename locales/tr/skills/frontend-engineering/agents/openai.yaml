@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Mühendisliği"
+  short_description: "React / Next.js arayüzlerini profesyonel seviyede kur ve cilala"
+  default_prompt: "Bu uygulamanın ana ekranlarını cila açısından incele ve bana önceliklendirilmiş bir düzeltme listesi ver."

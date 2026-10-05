@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend Mühendisliği"
+  short_description: "Production'da ayakta kalan endpoint, action, webhook ve job'lar"
+  default_prompt: "Bu projedeki API route'larını ve Server Action'ları canlıya hazır olma açısından incele ve düzeltilmesi gerekenleri listele."

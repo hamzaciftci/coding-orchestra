@@ -1,188 +1,209 @@
 <p align="center">
-  <img src=".github/social-preview.png" alt="Coding Orchestra — 11 professional software-engineering skills for Claude Code" width="100%">
+  <img src=".github/social-preview.png" alt="Coding Orchestra — Agent Skills for shipping production web apps" width="100%">
 </p>
 
 # 🎻 Coding Orchestra
 
-**A battle-tested collection of 11 professional software-engineering skills for [Claude Code](https://claude.com/claude-code).**
+**Agent Skills for taking web apps to production, for [Claude Code](https://claude.com/claude-code), [Codex](https://developers.openai.com/codex) and any agent that reads the [Agent Skills](https://agentskills.io) format.**
 
 [![Release](https://img.shields.io/github/v/release/hamzaciftci/coding-orchestra?color=6E56CF)](https://github.com/hamzaciftci/coding-orchestra/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-11-6E56CF)](#the-11-skills)
-[![Languages](https://img.shields.io/badge/skills-EN%20%2B%20TR-blue)](#installation)
-[![Made for Claude Code](https://img.shields.io/badge/made%20for-Claude%20Code-D97757)](https://claude.com/claude-code)
+[![Skills](https://img.shields.io/badge/skills-7-6E56CF)](#the-skills)
+[![Languages](https://img.shields.io/badge/skills-EN%20%2B%20TR-blue)](#install)
+[![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-D97757)](https://agentskills.io)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-Turn Claude into a disciplined senior engineering team. Each skill encodes the working principles of a specific expert role — backend architect, security auditor, QA engineer, product designer — plus a master orchestrator that runs an entire project from analysis to production-ready delivery.
+Seven skills that give a coding agent what it does not already have when it works on a Next.js / serverless / PostgreSQL project: the failure modes specific to that stack, the boundaries that matter (what needs your approval, what must never be printed), the shape of a useful deliverable, and small scripts that make an audit start from a complete inventory. One of the seven conducts an end-to-end production-readiness engagement using the others.
 
-> 🇹🇷 Türkçe okumak için → [README.tr.md](README.tr.md)
-> 📝 The skills ship in **both English (`skills-en/`) and Turkish (`skills/`)** — pick your language at install time.
-
----
-
-## Why?
-
-Out of the box, an AI assistant will happily write code before understanding your project, skip auth checks, swallow errors silently, and claim "done" without testing. **Coding Orchestra** installs a set of skills that force a professional discipline instead:
-
-- **Read → Analyze → Plan → Small change → Test → Report** on every edit
-- Security, data integrity and edge-cases treated as first-class, not afterthoughts
-- Honest reporting — "I verified in code" vs "I'm assuming", never fake test results
-- Minimal, reversible changes — no unrequested rewrites
-
-Built for modern web stacks: **Next.js · React · TypeScript · Tailwind CSS · Node.js · serverless · PostgreSQL / Supabase / Prisma · Vercel.**
+> 🇹🇷 Türkçe için → [README.tr.md](README.tr.md)
+> The skills ship in **English** (`skills/`) and **Turkish** (`locales/tr/skills/`) with the same structure and scripts.
 
 ---
 
-## The 11 Skills
+## What changed in v2
 
-| Slash command | Role | What it does |
+v1 was eleven long rulebooks written for models that needed step-by-step management. Current models already know general engineering practice, so most of that text cost context without changing behaviour. v2 keeps the parts that do change behaviour and restructures them:
+
+- **Knowledge the model lacks, not instructions it does not need.** Each `SKILL.md` is under 60 lines: what a good result looks like, where to stop and ask, and judgment calls. Stack-specific detail lives in reference files that load only when the task needs them.
+- **Scripts for the deterministic parts.** An entry-point and policy inventory for security audits, an environment-variable inventory that never reads secret values, and a post-deploy smoke check.
+- **Portable.** Frontmatter uses only fields from the Agent Skills specification, so the same folders work in Claude Code, Codex and other compatible agents.
+- **Fewer, sharper skills.** Eleven became seven. The always-on "general coding" rulebook and the bug-fix rulebook are gone; a 6-line [working agreement](templates/AGENTS.md) for your `AGENTS.md` / `CLAUDE.md` replaces them.
+- **Measured.** [`evals/`](evals/) holds a validator, a context-cost comparison against v1, a trigger test and a seeded-flaw audit benchmark. Results, including where v2 did not win, are in [`evals/RESULTS.md`](evals/RESULTS.md).
+
+Coming from v1? See [Upgrading from v1](#upgrading-from-v1).
+
+---
+
+## The skills
+
+| Skill | Use it when | What it adds |
 |---|---|---|
-| `/general-coding` | Senior Engineer / Tech Lead | Base engineering discipline for any task |
-| `/backend-engineering` | Backend Architect | APIs, auth, IDOR, validation, transactions, webhooks, cron, caching |
-| `/frontend-engineering` | Frontend Lead | Components, state, forms, loading/empty/error states, a11y, performance |
-| `/fullstack-delivery` | Delivery Lead | Audit, feature inventory, tech-debt, roadmap, release checklist |
-| `/security-audit` | AppSec Engineer | Find + fix vulnerabilities with a per-issue report |
-| `/bug-fix-refactor` | Debug/Refactor Specialist | Root-cause fixing & behavior-preserving refactor |
-| `/database-api-design` | Data & API Architect | Schema, indexes, safe migrations, contracts, compatibility |
-| `/deployment-readiness` | Release Manager | Build gate, env/secrets, serverless, monitoring, release checklist |
-| `/ui-ux-polish` | Product Designer + Design Eng | Amateur → professional SaaS quality |
-| `/testing-qa` | QA / SDET | Test pyramid, security regression, smoke tests |
-| `/production-delivery` | **Master Orchestrator** | Runs all skills across an 11-phase end-to-end delivery |
+| `production-delivery` | You want a whole project audited, finished or made production-ready | Audit across six lenses (in parallel where the agent supports subagents), a prioritized roadmap, approval gate, vertical slices, final go / no-go report |
+| `security-audit` | You want vulnerabilities found or closed in an app you own | Inventory script for routes, Server Actions, cron, middleware coverage and row level security; stack pitfalls for Next.js, Supabase, Prisma, Stripe; an 8-field finding format with confidence labels |
+| `deployment-readiness` | You are about to deploy, a production build fails, or a deployment needs verifying | Env inventory script (names only), production pitfalls for Vercel / serverless / edge, release checklist with evidence, smoke-check script |
+| `backend-engineering` | You add or change an endpoint, Server Action, webhook, cron job, auth or payment flow | A definition of done for server code and the places serverless differs from a long-running server |
+| `database-api-design` | You change a schema, write a migration or change an API contract | Staged expand/contract recipes, lock-safe DDL, Prisma and Supabase traps, compatibility rules |
+| `frontend-engineering` | You build UI, or an interface needs to look and feel professional | A definition of done for UI, App Router notes, a polish review method |
+| `testing-qa` | You add tests, plan QA or verify a fix | Risk-first test plan, authorization matrix, how to test webhooks, cron and Server Actions for real |
 
-Each skill follows the same structure: **Purpose · Role · Working Principles · Workflow · Standards · How the AI should behave · Critical warnings · Safe change order · Do / Don't · Checklist · Reporting format · Ready-to-use prompt.**
+Written for **Next.js (App Router) · React · TypeScript · Tailwind · Node serverless · PostgreSQL / Supabase / Prisma · Vercel · Stripe**. The method in each skill carries over to other stacks; the reference detail is specific.
+
+Security work is defensive: the skills are for auditing and fixing systems you own or are authorized to assess, and they tell the agent not to build weaponized exploits or probe third-party hosts.
 
 ---
 
-## Installation
+## Install
 
-### Quick install (recommended)
+Pick the route that fits your agent. English is the default; use the Turkish set by swapping the name or flag as shown.
 
-**macOS / Linux:**
+### Claude Code — plugin
+
+```
+/plugin marketplace add hamzaciftci/coding-orchestra
+/plugin install coding-orchestra@coding-orchestra
+```
+
+Turkish: `/plugin install coding-orchestra-tr@coding-orchestra`. Plugin skills are namespaced, for example `/coding-orchestra:security-audit`.
+
+### Claude Code or Codex — installer script
+
 ```bash
 git clone https://github.com/hamzaciftci/coding-orchestra.git
 cd coding-orchestra
-./install.sh --en      # English skills  (omit --en for Turkish)
+./install.sh                    # Claude Code, English  -> ~/.claude/skills
+./install.sh --agent codex      # Codex                 -> ~/.agents/skills
+./install.sh --agent all --tr   # both, Turkish
 ```
 
-**Windows (PowerShell):**
-```powershell
-git clone https://github.com/hamzaciftci/coding-orchestra.git
-cd coding-orchestra
-./install.ps1 -En      # English skills  (omit -En for Turkish)
-```
-
-The installer copies every skill into your personal Claude Code skills folder (`~/.claude/skills/`), so they're available in **all** your projects.
-
-**Installer flags:**
+Windows PowerShell: `./install.ps1`, `./install.ps1 -Agent codex`, `./install.ps1 -Agent all -Tr`.
 
 | Flag (sh / ps1) | Effect |
 |---|---|
-| `--en` / `-En` | Install the English skill set (`skills-en/`) |
-| `--tr` / `-Lang tr` | Install the Turkish skill set (`skills/`, default) |
-| `--project` / `-Project` | Install into `./.claude/skills` (this project only) |
-| `--dir PATH` / `-Dir PATH` | Install into a custom `.claude/skills` parent |
+| `--agent claude\|codex\|all` / `-Agent` | Which agent's skills directory to install into (default `claude`) |
+| `--lang en\|tr`, `--en`, `--tr` / `-Lang`, `-En`, `-Tr` | Language (default `en`) |
+| `--project` / `-Project` | Install into the current project (`.claude/skills`, `.agents/skills`) so teammates get the skills from the repo |
+| `--dir PATH` / `-Dir PATH` | Install into the project at `PATH` |
+| `--skill NAME` / `-Skill a,b` | Install only the named skills |
+| `--prune-legacy` / `-PruneLegacy` | Remove v1 skills that no longer exist |
+| `--force` / `-Force` | Replace a same-named skill that did not come from Coding Orchestra |
+| `--dry-run` / `-DryRun` | Show what would happen |
 
-> Pick **one** language — the English and Turkish sets share the same skill names, so they can't both live in `~/.claude/skills/` at once.
+The installer replaces only Coding Orchestra skills. If a different skill with the same name is already installed it is left alone unless you pass `--force`.
 
-### Manual install
+### Manual
 
-Copy each folder from `skills-en/` (or `skills/` for Turkish) into `~/.claude/skills/`:
+Copy any skill folder into the directory your agent scans:
 
 ```bash
-cp -r skills-en/* ~/.claude/skills/
+cp -r skills/security-audit ~/.claude/skills/     # Claude Code
+cp -r skills/security-audit ~/.agents/skills/     # Codex
 ```
 
-Or install a single skill:
+Each folder is self-contained (`SKILL.md`, `references/`, `scripts/`, `agents/openai.yaml`). The English and Turkish sets use the same skill names, so install one language per location.
+
+Start a new session after installing.
+
+### Optional: the working agreement
+
+Skills load on demand. For the few rules you want in every session (scope, approval points, secret handling, honest reporting), copy the section in [`templates/AGENTS.md`](templates/AGENTS.md) into your project's `AGENTS.md` (Codex and others) or `CLAUDE.md` (Claude Code). Turkish: [`locales/tr/templates/AGENTS.md`](locales/tr/templates/AGENTS.md).
+
+---
+
+## Use
+
+Describe the work and the agent picks the skill from its description:
+
+```
+Audit this project end to end and give me a roadmap. Don't change code until I approve the scope.
+Check this app for security holes before we launch. Report only.
+We deploy on Friday. What blocks the release?
+Rename users.fullname to display_name without downtime.
+```
+
+Or name a skill explicitly: `/security-audit` in Claude Code (`/coding-orchestra:security-audit` when installed as a plugin), `$security-audit` in Codex.
+
+The helper scripts can also be run directly, with Node 18+ and no dependencies:
+
 ```bash
-cp -r skills-en/security-audit ~/.claude/skills/
+node skills/security-audit/scripts/attack-surface.mjs path/to/project
+node skills/deployment-readiness/scripts/env-inventory.mjs path/to/project
+node skills/deployment-readiness/scripts/smoke.mjs https://staging.example.com / /login /api/health
 ```
-
-### Project-scoped install
-
-To ship the skills with a specific project only (so your teammates get them via the repo), copy into that project's `.claude/skills/` instead of the global folder.
-
-> **After installing, restart Claude Code** so it re-scans the skills directory. Then type `/` to see them, or just describe your task and Claude will pick the right skill automatically.
 
 ---
 
-## Usage
+## How a skill is built
 
-### Run the full end-to-end delivery
 ```
-/production-delivery
-Take this project through the full 11-phase flow and make it production-ready.
-First run the Phase 1–9 audits and give me a prioritized roadmap; after my approval,
-apply changes in vertical slices with an interim report after each, then a final report.
-```
-
-### Target a single concern
-```
-/security-audit        → find and close all Critical/High vulnerabilities
-/frontend-engineering  → bring the UI up to professional standard
-/deployment-readiness  → get this project ready to go live
-/bug-fix-refactor      → fix this bug at its root cause and add a regression test
-/database-api-design   → design the schema + API contract for this feature
+skills/security-audit/
+├── SKILL.md              # ~50 lines: outcome, approach, boundaries, judgment calls
+├── references/           # loaded only when the task needs them
+│   ├── stack-pitfalls.md
+│   └── report-template.md
+├── scripts/
+│   └── attack-surface.mjs
+└── agents/openai.yaml    # display metadata for Codex
 ```
 
-### Audit-only (no code changes)
-```
-/production-delivery
-Run Phases 1–9 only. Change no code — just give me a prioritized findings + roadmap report.
-```
-
-You don't even have to type the slash command — describe the work ("audit this project for security holes") and Claude will trigger the matching skill from its description.
+- The `description` says what the skill does and when to use it; that is all an agent sees until the skill activates.
+- `SKILL.md` explains reasons instead of issuing all-caps rules, and leaves the method to the model.
+- Frontmatter is limited to `name`, `description`, `license`, `compatibility` and `metadata`. Tool-specific settings stay out so every agent can load the file.
+- Skills refer to each other by name. `production-delivery` works alone and goes deeper when the specialists are installed.
 
 ---
 
-## How it works
+## Evals
 
-Claude Code discovers skills as folders containing a `SKILL.md` file with YAML frontmatter:
-
-```markdown
----
-name: security-audit
-description: When to use this skill...
-trigger: /security-audit
----
-
-# ... the full expert instructions ...
+```bash
+node evals/validate.mjs        # spec compliance, size budgets, links, EN/TR parity, manifests
+node evals/context-cost.mjs    # context footprint, v1 vs current
 ```
 
-The `description` tells Claude *when* to reach for the skill; the body tells it *how* to behave once engaged. The `/production-delivery` orchestrator references the other skills by phase, applying a conflict-priority order: **Security > Data integrity > Correctness > Compatibility > Performance > Polish.**
+`evals/` also contains a skill-selection test (46 English and Turkish requests, including near-miss negatives) and an audit benchmark: a deliberately flawed Next.js project with 30 seeded issues, audited with no skill, the v1 skill and the current skill. See [`evals/README.md`](evals/README.md) for how to run them and [`evals/RESULTS.md`](evals/RESULTS.md) for the numbers and their limits.
 
 ---
 
-## Repository structure
+## Upgrading from v1
+
+| v1 skill | v2 |
+|---|---|
+| `production-delivery` | `production-delivery` (rewritten) |
+| `fullstack-delivery` | merged into `production-delivery` |
+| `security-audit` | `security-audit` |
+| `backend-engineering` | `backend-engineering` |
+| `database-api-design` | `database-api-design` |
+| `deployment-readiness` | `deployment-readiness` |
+| `frontend-engineering` | `frontend-engineering` |
+| `ui-ux-polish` | merged into `frontend-engineering` (polish review) |
+| `testing-qa` | `testing-qa` |
+| `general-coding` | retired; see the [working agreement](templates/AGENTS.md) |
+| `bug-fix-refactor` | retired; current models do this without a skill |
+
+Other breaking changes: English now lives in `skills/` and is the installer default; Turkish moved to `locales/tr/skills/` (`--tr`). The non-standard `trigger:` frontmatter field is gone. To clean up an existing install, run the installer with `--prune-legacy`.
+
+---
+
+## Repository layout
 
 ```
 coding-orchestra/
-├── skills-en/          # English skill set (11 skills)
-│   ├── general-coding/SKILL.md
-│   ├── ...
-│   └── production-delivery/SKILL.md
-├── skills/             # Turkish skill set (11 skills)
-│   ├── general-coding/SKILL.md
-│   ├── ...
-│   └── production-delivery/SKILL.md
-├── install.sh          # macOS / Linux installer
-├── install.ps1         # Windows installer
-├── README.md
-├── README.tr.md        # Turkish
-├── CONTRIBUTING.md
-├── CHANGELOG.md
-└── LICENSE             # MIT
+├── skills/                  # English skills (also the Claude Code plugin's skills)
+├── locales/tr/              # Turkish skills, plugin manifest and working agreement
+├── templates/AGENTS.md      # optional always-on working agreement
+├── .claude-plugin/          # plugin and marketplace manifests
+├── evals/                   # validator, context cost, trigger test, audit benchmark
+├── install.sh, install.ps1
+└── README.md, README.tr.md, CONTRIBUTING.md, CHANGELOG.md, LICENSE
 ```
-
----
 
 ## Contributing
 
-Contributions are very welcome — new skills, improvements, and especially **English translations** of the existing Turkish skills. See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md). The short version: add knowledge the model does not have, keep `SKILL.md` lean, keep English and Turkish in step, and run `node evals/validate.mjs`.
 
 ## License
 
-[MIT](LICENSE) © Hamza Çiftçi. Use it freely, including commercially. Attribution appreciated but not required.
+[MIT](LICENSE) © Hamza Çiftçi.
 
 ---
 
-<sub>Not affiliated with Anthropic. "Claude" and "Claude Code" are trademarks of Anthropic.</sub>
+<sub>Not affiliated with Anthropic or OpenAI. "Claude" and "Claude Code" are trademarks of Anthropic; "Codex" is a trademark of OpenAI.</sub>

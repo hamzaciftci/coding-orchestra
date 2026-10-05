@@ -1,0 +1,4 @@
+interface:
+  display_name: "Veritabanı ve API Tasarımı"
+  short_description: "Veriyi ve client'ları bozmayan şema ve sözleşme değişiklikleri"
+  default_prompt: "Bu şema değişikliğini güvenli, aşamalı bir migration olarak planla ve herhangi bir şey uygulamadan önce SQL'i bana göster."

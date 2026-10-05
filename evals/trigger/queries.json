@@ -1,0 +1,58 @@
+{
+  "note": "Requests a user might type, in English and Turkish. `expect` is the skill(s) that should activate with the current set; null means no skill should load. `v1` is what the v1.1.0 set was designed to do with the same request, so each version is scored against its own intent. Near-miss negatives (33-46) are tasks that look close to a skill's territory but do not need one.",
+  "queries": [
+    { "id": 1, "q": "Can you check this app for security holes before I launch next week?", "expect": ["security-audit"], "v1": ["security-audit"] },
+    { "id": 2, "q": "Users are reporting they can see each other's invoices. Find out how that's possible and fix it.", "expect": ["security-audit", "backend-engineering"], "v1": ["security-audit", "backend-engineering", "bug-fix-refactor"] },
+    { "id": 3, "q": "Projede güvenlik açığı var mı diye baştan sona bakar mısın? Kod değiştirme, sadece raporla.", "expect": ["security-audit"], "v1": ["security-audit"] },
+    { "id": 4, "q": "Supabase service role key'i yanlışlıkla client tarafında kullanmışım galiba. Başka sızıntı var mı bakar mısın?", "expect": ["security-audit"], "v1": ["security-audit"] },
+    { "id": 5, "q": "I think our Stripe webhook can be spoofed. Review the payment endpoints for holes.", "expect": ["security-audit", "backend-engineering"], "v1": ["security-audit", "backend-engineering"] },
+
+    { "id": 6, "q": "We're going live on Vercel on Friday. Is this project ready?", "expect": ["deployment-readiness", "production-delivery"], "v1": ["deployment-readiness", "production-delivery", "fullstack-delivery"] },
+    { "id": 7, "q": "The build passes locally but the Vercel deployment crashes with a module-not-found error in an edge function.", "expect": ["deployment-readiness"], "v1": ["deployment-readiness", "bug-fix-refactor"] },
+    { "id": 8, "q": "Projeyi canlıya almadan önce eksik ne var kontrol et, env değişkenleri falan.", "expect": ["deployment-readiness"], "v1": ["deployment-readiness"] },
+    { "id": 9, "q": "Deploy bitti, her şey çalışıyor mu diye bir smoke test yapalım.", "expect": ["deployment-readiness"], "v1": ["deployment-readiness", "testing-qa"] },
+
+    { "id": 10, "q": "Add a POST /api/invoices endpoint that creates an invoice for the logged-in user.", "expect": ["backend-engineering"], "v1": ["backend-engineering"] },
+    { "id": 11, "q": "Write a Stripe webhook handler for checkout.session.completed.", "expect": ["backend-engineering"], "v1": ["backend-engineering"] },
+    { "id": 12, "q": "Her gece eski kayıtları silen bir cron job ekle, Vercel cron ile çalışsın.", "expect": ["backend-engineering"], "v1": ["backend-engineering"] },
+    { "id": 13, "q": "Login endpoint'ine rate limit ekler misin?", "expect": ["backend-engineering"], "v1": ["backend-engineering", "security-audit"] },
+    { "id": 14, "q": "Create a server action that updates the user's display name.", "expect": ["backend-engineering"], "v1": ["backend-engineering", "frontend-engineering"] },
+
+    { "id": 15, "q": "Rename the fullname column to display_name in the users table.", "expect": ["database-api-design"], "v1": ["database-api-design"] },
+    { "id": 16, "q": "I need a teams feature. Design the tables and relations in Prisma.", "expect": ["database-api-design"], "v1": ["database-api-design"] },
+    { "id": 17, "q": "orders tablosuna zorunlu bir currency kolonu eklemem lazım, migration yaz.", "expect": ["database-api-design"], "v1": ["database-api-design"] },
+    { "id": 18, "q": "API response'undaki userName alanını kaldırmak istiyorum ama mobil uygulama da kullanıyor.", "expect": ["database-api-design", "backend-engineering"], "v1": ["database-api-design", "backend-engineering"] },
+    { "id": 19, "q": "Add an index to speed up the orders list query. The table has 40 million rows.", "expect": ["database-api-design"], "v1": ["database-api-design"] },
+
+    { "id": 20, "q": "Build a settings page with a profile form.", "expect": ["frontend-engineering"], "v1": ["frontend-engineering"] },
+    { "id": 21, "q": "The dashboard looks amateurish. Make it look like a real SaaS product.", "expect": ["frontend-engineering"], "v1": ["ui-ux-polish", "frontend-engineering"] },
+    { "id": 22, "q": "Landing page'i daha profesyonel hale getir.", "expect": ["frontend-engineering"], "v1": ["ui-ux-polish", "frontend-engineering"] },
+    { "id": 23, "q": "Bu tabloya loading skeleton ve boş durum ekranı ekle.", "expect": ["frontend-engineering"], "v1": ["frontend-engineering", "ui-ux-polish"] },
+    { "id": 24, "q": "I'm getting a hydration mismatch error on the navbar in my Next.js app.", "expect": ["frontend-engineering"], "v1": ["frontend-engineering", "bug-fix-refactor"] },
+
+    { "id": 25, "q": "Add tests for the orders API.", "expect": ["testing-qa"], "v1": ["testing-qa"] },
+    { "id": 26, "q": "Set up Playwright and write an end-to-end test for the signup flow.", "expect": ["testing-qa"], "v1": ["testing-qa"] },
+    { "id": 27, "q": "Bu projede hiç test yok, nereden başlamalıyım? Bir test planı çıkar.", "expect": ["testing-qa"], "v1": ["testing-qa"] },
+    { "id": 28, "q": "Yetkilendirme kontrolleri için regresyon testleri yaz.", "expect": ["testing-qa"], "v1": ["testing-qa"] },
+
+    { "id": 29, "q": "I inherited this half-finished Next.js app. Get it to production quality.", "expect": ["production-delivery"], "v1": ["production-delivery", "fullstack-delivery"] },
+    { "id": 30, "q": "Do a full audit of the whole project and give me a roadmap of what to fix.", "expect": ["production-delivery"], "v1": ["production-delivery", "fullstack-delivery"] },
+    { "id": 31, "q": "Bu projeyi baştan sona incele ve production-ready hale getir.", "expect": ["production-delivery"], "v1": ["production-delivery", "fullstack-delivery"] },
+    { "id": 32, "q": "Projeyi devraldım, yarım kalmış. Eksikleri çıkarıp sırayla bitirelim.", "expect": ["production-delivery"], "v1": ["production-delivery", "fullstack-delivery"] },
+
+    { "id": 33, "q": "Write a Python script that renames all .jpeg files in a folder to .jpg.", "expect": [null], "v1": ["general-coding", null] },
+    { "id": 34, "q": "What's the difference between JWTs and session cookies?", "expect": [null], "v1": [null] },
+    { "id": 35, "q": "Fix the typo in the README title.", "expect": [null], "v1": [null, "general-coding"] },
+    { "id": 36, "q": "Bu regex ne yapıyor açıklar mısın: ^\\d{3}-\\d{4}$", "expect": [null], "v1": [null] },
+    { "id": 37, "q": "This function throws 'undefined is not a function' when the list is empty. Fix it.", "expect": [null], "v1": ["bug-fix-refactor", "general-coding"] },
+    { "id": 38, "q": "Refactor this 300-line function into smaller pieces without changing behavior.", "expect": [null], "v1": ["bug-fix-refactor"] },
+    { "id": 39, "q": "Write a Rust CLI that parses a CSV file and prints column sums.", "expect": [null], "v1": ["general-coding", null] },
+    { "id": 40, "q": "Bu React Native uygulamasına push notification ekle.", "expect": [null], "v1": ["general-coding", null] },
+    { "id": 41, "q": "Summarize what this repository does.", "expect": [null], "v1": [null] },
+    { "id": 42, "q": "Set up a GitHub Actions workflow that runs lint on every pull request.", "expect": [null], "v1": ["general-coding", null] },
+    { "id": 43, "q": "Bump eslint to the latest version.", "expect": [null], "v1": [null, "general-coding"] },
+    { "id": 44, "q": "Bu değişiklikler için bir commit mesajı yaz.", "expect": [null], "v1": [null] },
+    { "id": 45, "q": "Explain how Prisma's connection pooling works.", "expect": [null], "v1": [null] },
+    { "id": 46, "q": "Translate the button labels in this component to German.", "expect": [null], "v1": [null, "frontend-engineering", "general-coding"] }
+  ]
+}

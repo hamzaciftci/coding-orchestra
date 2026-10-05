@@ -1,205 +1,41 @@
 ---
 name: frontend-engineering
-description: Professional React Nextjs App Router Tailwind frontend - components, state, forms, loading empty error states, responsive, accessibility, SEO, performance, dark mode. Use when building or improving UI pages or components.
-trigger: /frontend-engineering
+description: Builds and polishes React, Next.js App Router and Tailwind interfaces to a professional standard, covering server and client component boundaries, forms, loading, empty and error states, accessibility, responsive layout, dark mode, performance, visual consistency and microcopy. Use when creating or changing pages or components, when an interface looks amateur or inconsistent and needs polish, or when reviewing frontend code, a dashboard or a landing page for quality.
+license: MIT
+compatibility: Written for React with the Next.js App Router and Tailwind CSS. The quality bar and the polish review apply to any component framework.
+metadata:
+  version: "2.0.0"
+  source: coding-orchestra
 ---
 
-# FRONTEND_ENGINEERING_SKILL
+# Frontend engineering
 
-## Amaç
-React / Next.js / TypeScript / Tailwind CSS tabanlı arayüzlerde **profesyonel, erişilebilir, hızlı ve tutarlı frontend geliştirme** yapmak.
+Start from what the project already has. Find its components, tokens, spacing scale, form and data-fetching patterns, and build with those. A new screen that introduces its own button style, colour values or state library makes the product look less finished, however good it is in isolation. If the project has no system yet, say so and propose a small one (tokens and a handful of base components) before styling screens individually.
 
-Kullanım durumları:
-- Yeni sayfa/component geliştirme
-- Mevcut arayüzün iyileştirilmesi, responsive/accessibility düzeltmeleri
-- Form, state ve veri akışı sorunlarının çözümü
-- Frontend performans ve SEO iyileştirmeleri
+## What "done" means for an interface
 
-## Rol
-**Senior Frontend Lead / Design-minded Engineer.** React ve Next.js App Router'ı derinlemesine bilen, tasarım sistemi disiplinine sahip, kullanıcı deneyimini ve erişilebilirliği kod kalitesi kadar önemseyen bir mühendis.
+Most unfinished UI is finished on the happy path only. A screen is done when:
 
-## Çalışma Prensipleri
-1. **Kullanıcının göreceği her state tasarlanır:** loading, empty, error, success, partial. "Sadece happy path" render eden component eksiktir.
-2. **Mevcut tasarım diline uy.** Projedeki spacing, renk, component pattern'lerini keşfet ve onları kullan; yeni bir görsel dil icat etme.
-3. **Server-first düşün (Next.js App Router):** Varsayılan server component; `"use client"` yalnızca etkileşim/state/effect gerektiğinde ve ağacın mümkün olan en alt seviyesinde.
-4. **State'i olabildiğince az ve olabildiğince yerel tut.** URL'de yaşayabilecek state (filtre, sekme, sayfa) URL'de yaşar.
-5. **Erişilebilirlik pazarlık konusu değildir.** Klavyeyle kullanılamayan arayüz bitmemiş arayüzdür.
-6. **Hata asla sessizce yutulmaz.** Başarısız istek kullanıcıya anlaşılır şekilde gösterilir ve tekrar deneme yolu sunulur.
+- **Every state is designed.** Loading without layout shift, empty with an explanation and a next action, error in plain language with a way to retry, partial failure that does not take down the page, and success feedback.
+- **It works without a mouse and without perfect eyesight.** Real buttons and links, labelled inputs, visible focus, errors tied to their fields, contrast at WCAG AA, nothing conveyed by colour alone.
+- **It holds at 360 px and at 1440 px.** No accidental horizontal scroll, touch targets around 44 px, tables that reflow or scroll inside their own container.
+- **It holds in both themes** if the project has dark mode, which means colours come from tokens.
+- **Forms defend against real use.** Field-level errors, disabled and busy states during submit, no double submission, input preserved after a failed submit. Client validation is for the user's benefit; the server validates again.
+- **Destructive actions say what will happen** and ask first.
+- **Copy is specific.** Buttons name the action, errors say what to do next.
 
-## İş Akışı
-1. **Projeyi analiz et:** Next.js sürümü, App/Pages Router, UI kit (shadcn/ui? Radix? custom?), state kütüphanesi (React Query/SWR/Zustand?), form kütüphanesi, Tailwind config.
-2. **Dosya yapısını anla:** `app/` yapısı, layout hiyerarşisi, ortak component'ler, mevcut tema token'ları.
-3. **Bağımlılıkları kontrol et:** Var olan kütüphaneyi kullan; aynı işi yapan ikinci kütüphaneyi ekleme.
-4. **Mevcut hataları bul:** console error'ları, hydration hataları, eksik key'ler, kırık responsive davranış, eksik state'ler.
-5. **Riskleri çıkar:** Ortak component değişiyorsa hangi sayfalar etkilenir?
-6. **Çözüm planı oluştur.**
-7. **Uygula:** Component → state → stil → erişilebilirlik → durum ekranları sırasıyla.
-8. **Test et:** Build + typecheck; mümkünse dev server'da mobil ve masaüstü görünümde doğrula; console temiz mi kontrol et.
-9. **Raporla.**
+## App Router specifics
 
-## Frontend Standartları (Zorunlu Kapsam)
+The server and client component boundary, caching, Server Actions and hydration are where current React differs from what older code and habits assume. Read [references/app-router-notes.md](references/app-router-notes.md) when working in a Next.js App Router project, and before adding `"use client"`, `useEffect` data fetching or a global store.
 
-### Component Mimarisi
-- Küçük, tek sorumluluklu component'ler; sayfa dosyaları kompozisyon yapar, iş mantığı hook'larda/servislerde.
-- Props arayüzleri açık tiplenir; `props: any` ❌. Boolean prop patlamasından kaçın (`variant` union'ı tercih et).
-- Sunum (dumb) ve veri (container/server) component'lerini ayır.
-- Tekrarlanan UI parçası ikinci kullanımda ortak component'e çıkarılır (`components/ui`, `components/shared` gibi mevcut düzene uyarak).
+## Polish work
 
-### State Management
-- Öncelik sırası: yerel state → URL state → React Query/SWR (server state) → global store (Zustand vb., yalnızca gerçekten global olan için).
-- Server'dan gelen veri global store'a kopyalanmaz; cache kütüphanesinde yaşar (tek doğruluk kaynağı).
-- Derived state ayrıca state'te tutulmaz, render'da hesaplanır (`useMemo` yalnızca ölçülebilir maliyette).
-- `useEffect` ile state senkronlama anti-pattern'inden kaçın; çoğu senaryo event handler'da veya render'da çözülür.
+When the task is to make an existing interface look and feel professional, review before restyling. [references/polish-review.md](references/polish-review.md) gives the dimensions to assess (hierarchy, type, spacing, colour, states, forms, mobile, copy, landing pages) and how to turn them into a prioritized list. Fix system-level causes first: one corrected token or base component improves every screen, and screen-by-screen tweaks drift apart again.
 
-### Form Yönetimi ve Validation
-- Standart: React Hook Form + Zod resolver (veya projedeki mevcut çözüm).
-- Şema, backend ile paylaşılır/aynalanır — client validation UX içindir, güvenlik backend'dedir.
-- Alan bazlı hata mesajları alanın altında; submit hatası formun üstünde erişilebilir bir alert'te.
-- Submit sırasında: buton disabled + loading göstergesi + çift submit engeli.
-- Başarıda net geri bildirim (toast/yönlendirme); kaydedilmemiş değişiklik varsa ayrılma uyarısı düşün.
+Polish must not change behaviour. Form submission, navigation, analytics hooks and query parameters should work exactly as before; if a visual change requires a behaviour change, call it out.
 
-### Loading / Empty / Error State Tasarımı
-- **Loading:** Layout shift yaratmayan skeleton'lar (spinner'a tercih edilir); Next.js'te `loading.tsx` + `<Suspense>`.
-- **Empty:** İkon/illüstrasyon + açıklayıcı metin + aksiyon CTA'sı ("Henüz proje yok — İlk projeni oluştur").
-- **Error:** İnsan dilinde mesaj + "Tekrar dene" aksiyonu; `error.tsx` boundary'leri; teknik detay kullanıcıya gösterilmez.
-- Kısmi hata: sayfanın bir bölümü hata verirse tüm sayfa çökmez (bölgesel boundary).
+## Verifying
 
-### Responsive Tasarım ve Mobile-First
-- Tailwind'de mobile-first: önce taban (mobil) stiller, sonra `sm: md: lg:` genişletmeleri.
-- Test genişlikleri: 360-390px (mobil), 768px (tablet), 1280px+ (masaüstü).
-- Dokunma hedefleri min 44x44px; yatay scroll asla kazara oluşmaz; tablolar mobilde ya karta dönüşür ya kendi container'ında scroll eder.
-- `100vh` mobil tarayıcı sorunları için `dvh` kullan.
+Look at the result in a browser if you have any way to (a dev server and a browser tool, screenshots, the project's visual or end-to-end tests), at mobile and desktop widths and in both themes. Run typecheck, lint and tests. If you could not see it rendered, say so plainly; UI that only compiled has not been verified.
 
-### Accessibility (a11y)
-- Semantik HTML önce: `button`, `nav`, `main`, `label` — div-soup ❌. Tıklanabilir `div` yerine `button`.
-- Tüm etkileşim klavyeyle mümkün; focus görünür (`focus-visible` stilleri kaldırılmaz).
-- Görseller anlamlıysa `alt` dolu, dekoratifse `alt=""`.
-- Form input'ları `label` ile bağlı; hata mesajları `aria-describedby` ile ilişkili.
-- Modal/dropdown'da focus trap + Escape ile kapanma (Radix/shadcn bunu sağlar — custom yazma).
-- Renk kontrastı WCAG AA (normal metin 4.5:1); bilgi yalnızca renkle iletilmez.
-
-### SEO
-- Her sayfada Next.js Metadata API ile unique `title` + `description`; dinamik sayfalarda `generateMetadata`.
-- Tek `h1`, mantıklı başlık hiyerarşisi; anlamlı link metinleri ("buraya tıkla" ❌).
-- OG/Twitter kartları, canonical URL, `sitemap.ts` + `robots.ts`.
-- İçerik sayfaları server component olarak render edilir (client-only içerik SEO kaybıdır).
-
-### Performance Optimization
-- Core Web Vitals hedefleri: LCP < 2.5s, CLS < 0.1, INP < 200ms.
-- `next/image` zorunlu (boyutlar belirtilmiş, LCP görseline `priority`); `next/font` ile font yükleme (CLS önler).
-- Ağır client kütüphaneleri `next/dynamic` ile lazy load; grafik/editör gibi bileşenler viewport'a girince yüklenir.
-- Bundle bilinci: tarih için dayjs/date-fns (moment ❌), lodash tam import ❌; `@next/bundle-analyzer` ile şüpheli büyümeyi kontrol et.
-- Liste render'larında stabil `key` (index-key yalnızca statik listede).
-
-### Dark Mode
-- Renkler her zaman token üzerinden (CSS variables / Tailwind semantic renkler: `bg-background`, `text-foreground`); hardcoded `bg-white` yeni kodda ❌.
-- `next-themes` (veya mevcut çözüm) ile class stratejisi; FOUC engellenir; `prefers-color-scheme` varsayılanı desteklenir.
-- Her yeni component iki temada da kontrol edilir.
-
-### UI Consistency ve Design System Mantığı
-- Spacing 4px grid'inde ve projedeki mevcut ölçekle tutarlı; rastgele `mt-[13px]` ❌.
-- Buton/input/kart varyantları merkezi component'ten gelir; sayfa içinde inline yeniden stillenmiş "sahte buton" ❌.
-- Renk paleti, radius, gölge ölçekleri Tailwind config/token'lardan; tek seferlik hex değerleri eklenmez.
-
-### Tailwind CSS Best Practice
-- Class sıralamasında tutarlılık (prettier-plugin-tailwindcss varsa ona uy).
-- Koşullu class'lar `cn()`/`clsx` + `tailwind-merge` ile; string birleştirme karmaşası ❌.
-- Tekrarlanan uzun class dizileri component'e (veya `cva` varyantına) çıkarılır; `@apply` minimumda.
-- Arbitrary value (`w-[347px]`) sadece gerçekten gerektiğinde.
-
-### React Best Practice
-- Hook kuralları: koşullu hook ❌, bağımlılık dizileri dürüst (lint uyarısı susturulmaz, sebep çözülür).
-- `useEffect` son çare: veri çekme React Query/server component'te, senkronizasyon event'te.
-- Memoization (`memo`, `useMemo`, `useCallback`) ölçülen soruna çare olarak; her yere serpiştirme ❌.
-- Anahtar prop'suz liste, render içinde component tanımı, state mutasyonu ❌.
-
-### Next.js App Router Best Practice & Client/Server Ayrımı
-- Veri çekme server component'te; secret'lar yalnızca server tarafında (`server-only` paketi ile işaretle).
-- `"use client"` sınırı bilinçli: interaktif yaprak component'ler client, sayfa iskeleti server.
-- Server Actions kullanılıyorsa: input'u Zod ile doğrula + auth kontrolü action içinde (action'lar public endpoint'tir!).
-- `loading.tsx`, `error.tsx`, `not-found.tsx` route segmentlerinde tanımlı.
-- Route Handler vs Server Action ayrımını projedeki mevcut pattern'e göre yap.
-
-### Kullanıcı Deneyimi, Microcopy, Toast
-- **Microcopy:** Butonlar eylemi söyler ("Kaydet", "Projeyi Sil") — "Tamam/Evet" ❌. Hata mesajları çözüm önerir ("Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.").
-- **Toast:** Başarı kısa (2-4sn) ve otomatik kapanır; hata daha kalıcı + aksiyon içerebilir; aynı anda toast yığılması engellenir (sonner vb.). Kritik onaylar toast'a değil dialog'a.
-- **Destructive işlemler:** Onay dialog'u + eylemin sonucu net yazılır ("Bu işlem geri alınamaz. 12 kayıt silinecek.").
-- Optimistic update yalnızca geri alınabilir işlemlerde; hata durumunda state geri sarılır ve kullanıcı bilgilendirilir.
-
-### Frontend Security Checklist
-- [ ] `dangerouslySetInnerHTML` yok; varsa içerik sanitize (DOMPurify) ediliyor
-- [ ] Kullanıcı üretimi URL'ler doğrulanıyor (`javascript:` ❌); harici linklerde `rel="noopener noreferrer"`
-- [ ] Secret/servis anahtarı client bundle'ında yok (`NEXT_PUBLIC_` denetimi)
-- [ ] Auth/rol kontrolü sadece UI gizleme değil — asıl kontrol backend'de; UI sadece yansıtır
-- [ ] localStorage'da hassas token saklanmıyor (httpOnly cookie tercih)
-- [ ] Form verisi backend'de de doğrulanıyor (client validation güvenlik değildir)
-
-## AI Nasıl Davranmalı?
-- Yeni UI yazmadan önce projedeki benzer bir sayfayı/component'i oku; oradaki pattern'i taklit et.
-- Ortak component'e dokunmadan önce onu kullanan tüm yerleri bul (`grep`) ve etki alanını raporla.
-- Her component tesliminde dört state'i (loading/empty/error/success) ve mobil görünümü açıkça ele aldığını belirt.
-- Görsel değişiklikleri mümkünse çalışan uygulamada doğrula; doğrulayamadıysan raporda "görsel doğrulama yapılmadı" yaz.
-- Acele edip erişilebilirlik ve responsive'i "sonraya" bırakma.
-
-## Kritik Uyarılar
-- ⚠️ Global stil/tema token'ı değişikliği tüm uygulamayı etkiler — önce etki analizi.
-- ⚠️ Hydration hatası görürsen susturma; server/client çıktı farkının kök sebebini çöz.
-- ⚠️ `"use client"`'ı dosya en üstüne alışkanlıkla ekleme; her ekleme bundle maliyeti.
-- ⚠️ Çalışan bir formu/akışı yeniden yazarken mevcut edge-case davranışlarını (draft, redirect, query param) kaybetme.
-
-## Kod Değiştirirken Uygulanacak Güvenli Sıra
-1. **Önce oku** — hedef component + kullanıldığı yerler + tema/token dosyaları.
-2. **Sonra analiz et** — state akışı, server/client sınırı, responsive davranış.
-3. **Sonra planla** — component ağacı, yeni/değişen dosyalar.
-4. **Sonra küçük değişiklik yap** — component bazında ilerle.
-5. **Sonra test et** — build, console, mobil+masaüstü, klavye navigasyonu, dark mode.
-6. **Sonra raporla.**
-
-## Yapılacaklar
-- ✅ Her veri gösteren component için loading/empty/error/success state'i uygula.
-- ✅ Mobile-first responsive; 360px'te kırılmayan layout.
-- ✅ Semantik HTML + klavye erişimi + görünür focus.
-- ✅ `next/image`, `next/font`, dynamic import ile performans hijyeni.
-- ✅ Form: RHF + Zod, alan bazlı hatalar, çift submit engeli.
-- ✅ Tüm renk/spacing'i mevcut token sisteminden kullan; dark mode'da doğrula.
-- ✅ Console'u temiz teslim et (error/warning sıfır hedefi).
-
-## Yapılmayacaklar
-- ❌ Hataları sessizce yutmak (boş catch, gösterilmeyen fetch hatası).
-- ❌ Sadece happy-path render eden component teslim etmek.
-- ❌ Tıklanabilir div, label'sız input, alt'sız anlamlı görsel.
-- ❌ Secret'ı client koduna/`NEXT_PUBLIC_`'e koymak.
-- ❌ Var olan UI kit yerine aynı işi yapan yeni kütüphane eklemek.
-- ❌ Hardcoded renk/spacing ile tasarım sistemini delmek.
-- ❌ Masaüstünde güzel, mobilde kırık arayüz teslim etmek.
-- ❌ `useEffect` içinde zincirleme state senkronu kurmak.
-
-## Kontrol Listesi
-- [ ] Typecheck + lint + build geçiyor
-- [ ] Console'da error/warning yok (hydration dahil)
-- [ ] 4 state (loading/empty/error/success) mevcut
-- [ ] Mobil (≤390px) ve masaüstü görünüm doğru
-- [ ] Klavye navigasyonu + focus görünürlüğü çalışıyor
-- [ ] Dark mode (varsa) bozulmuyor
-- [ ] Görseller `next/image`, fontlar `next/font`
-- [ ] SEO metadata (sayfa eklendiyse) tanımlı
-- [ ] Frontend security checklist işaretlendi
-
-## Raporlama Formatı
-1. **Yapılan analiz** (mevcut UI mimarisi, kullanılan kit ve pattern'ler)
-2. **Bulunan problemler**
-3. **Yapılan değişiklikler** (component/sayfa bazında)
-4. **Dokunulan dosyalar**
-5. **Neden bu çözüm**
-6. **Güvenlik etkisi**
-7. **Performans etkisi** (bundle, CWV, render davranışı)
-8. **Test sonucu** (build, görsel doğrulama, hangi viewport'lar)
-9. **Kalan riskler**
-10. **Sonraki öneriler**
-
-## Kullanım Promptu
-```
-/frontend-engineering kurallarını yükle ve uygula.
-Görev: [ör. "Bu projenin arayüzünü bu skill'e göre profesyonel hale getir" veya "X sayfasını bu skill standartlarıyla geliştir"]
-Her component için 4 state + mobil + a11y + dark mode kontrolünü raporla.
-```
+Changes to global tokens, the theme or shared base components affect every screen. Check a few unrelated screens after touching them, and mention the reach of the change in your summary.

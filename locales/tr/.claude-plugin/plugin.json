@@ -1,0 +1,13 @@
+{
+  "name": "coding-orchestra-tr",
+  "version": "2.0.0",
+  "description": "Coding Orchestra'nın Türkçe sürümü: Next.js / serverless web uygulamalarını production'a taşımak için yedi Agent Skill (güvenlik denetimi, backend, veritabanı ve API tasarımı, frontend, test, deploy hazırlığı ve uçtan uca teslimat).",
+  "author": {
+    "name": "Hamza Çiftçi",
+    "url": "https://github.com/hamzaciftci"
+  },
+  "homepage": "https://github.com/hamzaciftci/coding-orchestra",
+  "repository": "https://github.com/hamzaciftci/coding-orchestra",
+  "license": "MIT",
+  "keywords": ["agent-skills", "security-audit", "nextjs", "serverless", "supabase", "prisma", "deployment", "testing", "turkish"]
+}

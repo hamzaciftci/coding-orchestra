@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test ve QA"
+  short_description: "Auth, ödeme, webhook ve kritik akışlar için risk öncelikli testler"
+  default_prompt: "Bu proje için risk bazlı bir test planı yaz ve test eklemeden önce bana eksikleri göster."
