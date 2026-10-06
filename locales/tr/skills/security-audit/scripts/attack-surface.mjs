@@ -272,10 +272,13 @@ for (const f of walkSql(root).sort()) {
   for (const m of sql.matchAll(/create\s+table\s+(?:if\s+not\s+exists\s+)?([\w."`]+)/gi)) {
     if (!tables.has(name(m[1]))) tables.set(name(m[1]), { file: rel(f), rls: false, openPolicies: [] });
   }
-  for (const m of sql.matchAll(/alter\s+table\s+(?:if\s+exists\s+)?(?:only\s+)?([\w."`]+)\s+enable\s+row\s+level\s+security/gi)) {
+  // Apply ENABLE and DISABLE in statement order (files are sorted, so migration order) so the
+  // reported state is the final one.
+  for (const m of sql.matchAll(/alter\s+table\s+(?:if\s+exists\s+)?(?:only\s+)?([\w."`]+)\s+(enable|disable)\s+row\s+level\s+security/gi)) {
+    const rls = m[2].toLowerCase() === "enable";
     const t = tables.get(name(m[1]));
-    if (t) t.rls = true;
-    else tables.set(name(m[1]), { file: rel(f), rls: true, openPolicies: [] });
+    if (t) t.rls = rls;
+    else tables.set(name(m[1]), { file: rel(f), rls, openPolicies: [] });
   }
   for (const m of sql.matchAll(/create\s+policy\s+("[^"]+"|\w+)\s+on\s+([\w."`]+)([^;]*);/gi)) {
     if (/(using|with\s+check)\s*\(\s*true\s*\)/i.test(m[3])) {

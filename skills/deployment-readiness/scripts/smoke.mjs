@@ -7,7 +7,7 @@
 // A path may carry an expected status: /dashboard=307 (default: any 2xx).
 // The leading slash is optional. In Git Bash on Windows leave it out (login, api/health),
 // because MSYS rewrites arguments that start with "/" into Windows paths.
-// Also reports which security headers the first path returns.
+// Also reports which security headers the first path that responds returns.
 // Exit code 1 if any check fails.
 
 const args = process.argv.slice(2);
@@ -24,7 +24,9 @@ if (!base || !/^https?:\/\//.test(base)) {
   process.exit(2);
 }
 const checks = (rest.length ? rest : [""]).map((p) => {
-  const [raw, expected] = p.split("=");
+  // Only a trailing =<status> is an expectation, so query strings like ?full=true survive.
+  const m = p.match(/^(.*)=(\d{3})$/);
+  const [raw, expected] = m ? [m[1], m[2]] : [p, null];
   if (/^[A-Za-z]:[\/]/.test(raw)) {
     console.error(`"${raw}" looks like a path rewritten by Git Bash. Pass it without the leading slash.`);
     process.exit(2);
@@ -44,6 +46,7 @@ const SECURITY_HEADERS = [
 
 const results = [];
 let headerReport = null;
+let headerPath = null;
 
 for (const check of checks) {
   const url = new URL(check.path, base).toString();
@@ -54,6 +57,7 @@ for (const check of checks) {
     const ok = check.expected ? res.status === check.expected : res.status >= 200 && res.status < 300;
     results.push({ path: check.path, status: res.status, ms, ok, location: res.headers.get("location") });
     if (!headerReport) {
+      headerPath = check.path;
       headerReport = Object.fromEntries(SECURITY_HEADERS.map((h) => [h, res.headers.has(h)]));
       const csp = res.headers.get("content-security-policy") ?? "";
       if (/frame-ancestors/.test(csp)) headerReport["x-frame-options"] = true;
@@ -67,7 +71,7 @@ for (const check of checks) {
 const failed = results.filter((r) => !r.ok);
 
 if (asJson) {
-  console.log(JSON.stringify({ base, results, securityHeaders: headerReport, failed: failed.length }, null, 2));
+  console.log(JSON.stringify({ base, results, securityHeaders: headerReport, securityHeadersPath: headerPath, failed: failed.length }, null, 2));
 } else {
   console.log(`Smoke check — ${base}`);
   for (const r of results) {
@@ -76,7 +80,7 @@ if (asJson) {
   }
   if (headerReport) {
     const missing = Object.entries(headerReport).filter(([, present]) => !present).map(([h]) => h);
-    console.log(`Security headers on ${checks[0].path}: ${missing.length ? `missing ${missing.join(", ")}` : "all present"}`);
+    console.log(`Security headers on ${headerPath}: ${missing.length ? `missing ${missing.join(", ")}` : "all present"}`);
   }
   console.log(failed.length ? `${failed.length} of ${results.length} checks failed` : `All ${results.length} checks passed`);
 }

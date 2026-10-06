@@ -4,36 +4,45 @@
 
 # 🎻 Coding Orchestra
 
-**Web uygulamalarını production'a taşımak için Agent Skills: [Claude Code](https://claude.com/claude-code), [Codex](https://developers.openai.com/codex) ve [Agent Skills](https://agentskills.io) formatını okuyan diğer agent'lar için.**
+**Bir coding agent'ın Next.js / serverless web uygulamasını production'a taşımasına yardım eden yedi Agent Skill. [Claude Code](https://claude.com/claude-code), [Codex](https://developers.openai.com/codex) ve açık [Agent Skills](https://agentskills.io) formatını okuyan diğer agent'larda çalışır.**
 
 [![Release](https://img.shields.io/github/v/release/hamzaciftci/coding-orchestra?color=6E56CF)](https://github.com/hamzaciftci/coding-orchestra/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-7-6E56CF)](#skilller)
-[![Languages](https://img.shields.io/badge/skills-EN%20%2B%20TR-blue)](#kurulum)
+[![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-green.svg)](LICENSE)
+[![Skill](https://img.shields.io/badge/skill-7-6E56CF)](#skilller)
+[![Diller](https://img.shields.io/badge/skill-TR%20%2B%20EN-blue)](#kurulum)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-D97757)](https://agentskills.io)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Katkıya Açık](https://img.shields.io/badge/PR-hoş%20geldin-brightgreen.svg)](CONTRIBUTING.md)
 
-> [!IMPORTANT]
-> **Coding Orchestra baştan yenilendi — bu sürüm v2.** v1'in on bir uzun kural kitabı; ihtiyaç halinde yüklenen reference'lar, yardımcı script'ler ve ölçülmüş sonuçlarla gelen yedi yalın, taşınabilir Agent Skill'e dönüştü ve artık hem Claude Code'da hem Codex'te çalışıyor. [Ne değişti](#v2de-ne-değişti) · [v1'den geçiş](#v1den-geçiş) · [Sonuçlar](evals/RESULTS.md)
+> 🇬🇧 English → [README.md](README.md) · v1'den (11 skill) mi geliyorsunuz? → [v1'den geçiş](#v1den-geçiş)
 
-Yedi skill, bir coding agent'a Next.js / serverless / PostgreSQL projesinde çalışırken zaten bilmediği şeyleri verir: bu stack'e özgü hata modları, önemli sınırlar (neyin onayınızı gerektirdiği, neyin asla yazdırılmaması gerektiği), işe yarar bir çıktının biçimi ve denetimi eksiksiz bir envanterle başlatan küçük script'ler. Yedi skill'den biri, diğerlerini kullanarak uçtan uca bir production'a hazırlık çalışmasını yönetir.
-
-> 🇬🇧 English → [README.md](README.md)
-> Skill'ler **İngilizce** (`skills/`) ve **Türkçe** (`locales/tr/skills/`) olarak, aynı yapı ve aynı script'lerle gelir.
+Güncel modeller genel mühendislik pratiğini zaten biliyor. Gerçek bir projede eksik olan, stack'e ve işe özgü bilgi: Server Actions, Supabase row level security ya da Vercel cron'un production'da nasıl bozulduğu, geri alınamaz bir şeye dokunmadan önce nerede durup sorulacağı, işe yarar bir denetim raporunun neye benzediği. Bu skill'ler tam olarak bu bilgiyi verir, fazlasını değil, ve yalnızca görev gerektirdiğinde yüklenir.
 
 ---
 
-## v2'de ne değişti
+## Hızlı başlangıç
 
-v1, adım adım yönetilmesi gereken modeller için yazılmış on bir uzun kural kitabıydı. Güncel modeller genel mühendislik pratiğini zaten biliyor; o metnin çoğu davranışı değiştirmeden context harcıyordu. v2, davranışı gerçekten değiştiren kısımları korur ve yeniden yapılandırır:
+**Claude Code** (plugin):
 
-- **Modelin ihtiyaç duymadığı talimatlar değil, sahip olmadığı bilgi.** Her `SKILL.md` 60 satırın altında: iyi bir sonuç neye benzer, nerede durup sorulur, hangi kararlar muhakeme ister. Stack'e özgü ayrıntı, yalnızca görev gerektirdiğinde yüklenen reference dosyalarında durur.
-- **Deterministik işler için script'ler.** Güvenlik denetimi için giriş noktası ve policy envanteri, secret değerlerini hiç okumayan bir environment variable envanteri ve deploy sonrası smoke kontrolü.
-- **Taşınabilir.** Frontmatter yalnızca Agent Skills spesifikasyonundaki alanları kullanır; aynı klasörler Claude Code'da, Codex'te ve uyumlu diğer agent'larda çalışır.
-- **Daha az, daha keskin skill.** On bir skill yediye indi. Her zaman açık olan "genel kodlama" kural kitabı ve bug-fix kural kitabı kaldırıldı; yerlerini `AGENTS.md` / `CLAUDE.md` dosyanıza ekleyebileceğiniz 6 satırlık bir [çalışma anlaşması](locales/tr/templates/AGENTS.md) aldı.
-- **Ölçüldü.** [`evals/`](evals/) altında bir validator, v1'e karşı context maliyeti karşılaştırması, bir tetikleme testi ve tohumlanmış hatalarla bir denetim benchmark'ı var. Sonuçlar, v2'nin kazanmadığı yerler dahil, [`evals/RESULTS.md`](evals/RESULTS.md) dosyasında.
+```
+/plugin marketplace add hamzaciftci/coding-orchestra
+/plugin install coding-orchestra-tr@coding-orchestra
+```
 
-v1'den mi geliyorsunuz? [v1'den geçiş](#v1den-geçiş) bölümüne bakın.
+**Claude Code ya da Codex** (kurulum script'i):
+
+```bash
+git clone https://github.com/hamzaciftci/coding-orchestra.git
+cd coding-orchestra
+./install.sh --agent all --tr        # Windows: ./install.ps1 -Agent all -Tr
+```
+
+Sonra işi anlatın:
+
+```
+Yayına çıkmadan önce bu uygulamada güvenlik açığı var mı bak. Sadece raporla, kod değiştirme.
+```
+
+Agent, açıklamasına bakarak `security-audit` skill'ini seçer. İngilizce set ve projeye özel kurulum dahil diğer seçenekler [Kurulum](#kurulum) bölümünde.
 
 ---
 
@@ -41,41 +50,114 @@ v1'den mi geliyorsunuz? [v1'den geçiş](#v1den-geçiş) bölümüne bakın.
 
 | Skill | Ne zaman | Ne katar |
 |---|---|---|
-| `production-delivery` | Bütün bir projenin denetlenmesini, bitirilmesini ya da production'a hazırlanmasını istediğinizde | Altı mercekten denetim (agent subagent destekliyorsa paralel), önceliklendirilmiş yol haritası, onay kapısı, dikey dilimler, nihai hazır / hazır değil raporu |
-| `security-audit` | Sahibi olduğunuz bir uygulamada güvenlik açıklarının bulunmasını ya da kapatılmasını istediğinizde | Route'lar, Server Actions, cron, middleware kapsamı ve row level security için envanter script'i; Next.js, Supabase, Prisma, Stripe tuzakları; güven etiketli 8 alanlı bulgu formatı |
-| `deployment-readiness` | Deploy etmek üzereyken, production build'i kırıldığında ya da bir deploy'un doğrulanması gerektiğinde | Env envanter script'i (yalnızca isimler), Vercel / serverless / edge production tuzakları, kanıtlı release checklist'i, smoke script'i |
+| `production-delivery` | Bütün bir projenin denetlenmesini, bitirilmesini ya da production'a hazırlanmasını istediğinizde | Altı mercekten denetim (agent subagent destekliyorsa paralel), önceliklendirilmiş yol haritası, onay kapısı, doğrulanmış dikey dilimlerle düzeltmeler ve nihai hazır / hazır değil raporu |
+| `security-audit` | Sahibi olduğunuz bir uygulamada güvenlik açıklarının bulunmasını ya da kapatılmasını istediğinizde | Route'lar, Server Actions, cron, middleware kapsamı ve row level security için envanter script'i; Next.js, Supabase, Prisma ve Stripe tuzakları; güven etiketli 8 alanlı bulgu formatı |
+| `deployment-readiness` | Deploy etmek üzereyken, production build'i kırıldığında ya da bir deploy'un doğrulanması gerektiğinde | Env değişkeni envanter script'i (yalnızca isimler, asla değerler), Vercel / serverless / edge tuzakları, kanıtlı release checklist'i, smoke script'i |
 | `backend-engineering` | Endpoint, Server Action, webhook, cron job, auth ya da ödeme akışı eklerken veya değiştirirken | Sunucu kodu için "bitti" tanımı ve serverless'ın uzun ömürlü sunucudan ayrıldığı yerler |
 | `database-api-design` | Şema değiştirirken, migration yazarken ya da API sözleşmesini değiştirirken | Aşamalı expand/contract tarifleri, kilitlemeyen DDL, Prisma ve Supabase tuzakları, uyumluluk kuralları |
 | `frontend-engineering` | Arayüz geliştirirken ya da bir arayüzün profesyonel görünmesi gerektiğinde | Arayüz için "bitti" tanımı, App Router notları, cila inceleme yöntemi |
 | `testing-qa` | Test eklerken, QA planlarken ya da bir düzeltmeyi doğrularken | Risk öncelikli test planı, yetkilendirme matrisi, webhook, cron ve Server Action'ların gerçekten nasıl test edileceği |
 
-**Next.js (App Router) · React · TypeScript · Tailwind · Node serverless · PostgreSQL / Supabase / Prisma · Vercel · Stripe** için yazıldı. Her skill'deki yöntem başka stack'lere de taşınır; reference ayrıntıları bu stack'e özgüdür.
+**Next.js (App Router) · React · TypeScript · Tailwind · Node serverless · PostgreSQL / Supabase / Prisma · Vercel · Stripe** için yazıldı. Her skill'deki yöntem başka stack'lere de taşınır; reference ayrıntıları taşınmaz.
 
-Güvenlik çalışması savunma amaçlıdır: skill'ler sahibi olduğunuz ya da değerlendirmeye yetkili olduğunuz sistemleri denetlemek ve düzeltmek içindir; agent'a silah haline getirilmiş exploit yazmamasını ve üçüncü taraf host'ları yoklamamasını söyler.
+`production-delivery` tek başına çalışır; diğer altı skill kuruluysa daha derine iner. Genel kodlama ya da hata düzeltme için bilerek bir skill yok: güncel modeller bunu skill olmadan iyi yapıyor ve her kodlama görevini sahiplenen bir skill hepsinde context harcar.
+
+Güvenlik çalışması savunma amaçlıdır. Skill'ler sahibi olduğunuz ya da değerlendirmeye yetkili olduğunuz sistemleri denetlemek ve düzeltmek içindir; agent'a silah haline getirilmiş exploit yazmamasını ve üçüncü taraf host'ları yoklamamasını söyler.
+
+---
+
+## Kullanım
+
+İşi anlatın; agent onu bir skill'in açıklamasıyla eşleştirir:
+
+```
+Bu projeyi baştan sona denetle ve bana bir yol haritası çıkar. Kapsamı onaylayana kadar kod değiştirme.
+Cuma günü deploy ediyoruz. Release'i ne engelliyor?
+users.fullname kolonunu kesinti olmadan display_name olarak yeniden adlandır.
+Ödeme akışına test ekle; en çok bozulma ihtimali olan yerden başla.
+```
+
+Ya da skill'i adıyla çağırın:
+
+| Agent | Doğrudan çağırma |
+|---|---|
+| Claude Code (script ya da elle kurulum) | `/security-audit` |
+| Claude Code (plugin) | `/coding-orchestra-tr:security-audit` |
+| Codex | `$security-audit` ya da `/skills` listesinden seçin |
+
+Yardımcı script'ler tek başına da çalışır; Node 18+ yeterlidir, bağımlılık yoktur:
+
+```bash
+node skills/security-audit/scripts/attack-surface.mjs path/to/project
+node skills/deployment-readiness/scripts/env-inventory.mjs path/to/project
+node skills/deployment-readiness/scripts/smoke.mjs https://staging.example.com / /login /api/health
+```
+
+---
+
+## Anthropic ve OpenAI önerilerine göre tasarlandı
+
+v2, iki firmanın Agent Skills için yayımladığı önerileri izler; böylece aynı klasör iki agent'ta da değişmeden çalışır:
+
+| Öneri | Coding Orchestra'da nasıl uygulandı |
+|---|---|
+| Yalnızca Agent Skills spesifikasyonunda tanımlı alanları kullan | Frontmatter `name`, `description`, `license`, `compatibility` ve `metadata` ile sınırlı. v1'deki standart dışı `trigger:` alanı kaldırıldı. |
+| Açıklama üçüncü şahıs ağzından yazılır; skill'in ne yaptığını **ve ne zaman kullanılacağını** söyler, çünkü skill yüklenmeden önce agent'ın gördüğü tek şey odur | Her açıklama önce kapsamı, sonra bir "Use when…" cümlesini içerir. Kapsam dışı istekler (hata düzeltme, refactor, CI) agent'a skill'siz bırakılır. |
+| `SKILL.md` kısa tutulur (500 satırın çok altında); ayrıntı yalnızca gerektiğinde yüklenen dosyalara taşınır (kademeli yükleme), tek seviye derinlikte | Her `SKILL.md` 60 satırın altında. Stack'e özgü ayrıntı `references/` altında ve doğrudan `SKILL.md`'den link verilir. |
+| Katı kurallar yığmak yerine gerekçeyi açıkla, yöntemi modele bırak | Skill'ler sonucu, sınırları ve muhakeme gerektiren kararları gerekçeleriyle anlatır. Büyük harfli MUST listeleri yok. |
+| Deterministik, tekrarlanabilir işler için script kullan | `scripts/` altında envanter ve smoke kontrol script'leri; agent çalıştırır, tek başına da okunabilir. |
+| Codex, isteğe bağlı görüntüleme bilgilerini `agents/openai.yaml` dosyasından okur | Her skill görünen ad, kısa açıklama ve varsayılan prompt içeren bir `agents/openai.yaml` ile gelir. |
+| Her zaman geçerli proje kuralları skill'e değil `AGENTS.md` (Codex) ya da `CLAUDE.md` (Claude Code) dosyasına yazılır | Altı satırlık bir [çalışma anlaşması](locales/tr/templates/AGENTS.md) kapsamı, onay noktalarını, secret'ların ele alınışını ve dürüst raporlamayı kapsar. |
+| Skill'in işe yaradığını varsayma, ölç | [`evals/`](evals/) altında validator, context maliyeti karşılaştırması, seçim testi ve tohumlanmış hatalı denetim benchmark'ı var. |
+
+Bir skill'in yapısı:
+
+```
+skills/security-audit/
+├── SKILL.md              # ~50 satır: sonuç, yaklaşım, sınırlar, muhakeme gerektiren kararlar
+├── references/           # yalnızca görev gerektirdiğinde yüklenir
+│   ├── stack-pitfalls.md
+│   └── report-template.md
+├── scripts/
+│   └── attack-surface.mjs
+└── agents/openai.yaml    # Codex için görüntüleme bilgileri
+```
+
+---
+
+## Sonuçlar
+
+2026-10-05 tarihinde v1'e karşı ölçüldü; tüm sayılar ve sınırları [`evals/RESULTS.md`](evals/RESULTS.md) dosyasında.
+
+- **Daha az context.** Bir skill tetiklendiğinde gövdesi, yerini aldığı v1 dosyasından %57–86 daha küçük; genel kodlama ve hata düzeltme istekleri artık hiçbir şey yüklemiyor. Her oturumda duran skill listesi %23 büyüdü, çünkü açıklamalar artık her skill'in ne zaman kullanılacağını da söylüyor.
+- **Daha isabetli seçim.** Kapsam içindeki 32 isteğin 31–32'sinde doğru skill seçildi; kapsam dışındaki 14 isteğin hiçbirinde skill yüklenmedi (v1 bunların 4–6'sında yüklüyordu).
+- **Denetim başarısı modele bağlı.** Sonnet'te her koşul, skill'li ya da skill'siz, tohumlanmış 30 hatanın hepsini buldu; iyileşen raporun kendisiydi. Haiku'da v2 ortalama 30'da 25,7 buldu; v1 21,5, skill'siz 19,5. Fark büyük ölçüde stack'e özgü hatalardan geliyor.
+- **Çalıştırması daha ucuz değil.** Denetim başına token kullanımı v1 ile aşağı yukarı aynı.
+
+Örneklem küçük (her hücrede iki ya da üç çalıştırma), benchmark projesini skill'lerin yazarı hazırladı ve Codex içinde henüz hiçbir şey çalıştırılmadı.
 
 ---
 
 ## Kurulum
 
-Agent'ınıza uyan yolu seçin. Varsayılan dil İngilizcedir; Türkçe set için aşağıdaki isim ya da flag'i kullanın.
+Varsayılan dil İngilizcedir. Her yolun Türkçe karşılığı vardır.
 
-### Claude Code — plugin
+### Claude Code plugin
 
 ```
 /plugin marketplace add hamzaciftci/coding-orchestra
-/plugin install coding-orchestra-tr@coding-orchestra
+/plugin install coding-orchestra-tr@coding-orchestra    # Türkçe
+/plugin install coding-orchestra@coding-orchestra       # İngilizce
 ```
 
-İngilizce: `/plugin install coding-orchestra@coding-orchestra`. Plugin skill'leri namespace ile gelir, örneğin `/coding-orchestra-tr:security-audit`.
+Claude Code kurulum kapsamını sorar (user, project ya da local). Plugin skill'leri namespace ile gelir: `/coding-orchestra-tr:security-audit`, `/coding-orchestra:security-audit`.
 
-### Claude Code ya da Codex — kurulum script'i
+### Kurulum script'i (Claude Code, Codex ya da ikisi)
 
 ```bash
-git clone https://github.com/hamzaciftci/coding-orchestra.git
-cd coding-orchestra
-./install.sh --tr                  # Claude Code, Türkçe  -> ~/.claude/skills
-./install.sh --tr --agent codex    # Codex                -> ~/.agents/skills
-./install.sh --tr --agent all      # ikisi birden
+./install.sh --tr                    # Claude Code, Türkçe -> ~/.claude/skills
+./install.sh --tr --agent codex      # Codex               -> ~/.agents/skills
+./install.sh --tr --agent all        # ikisi birden
 ```
 
 Windows PowerShell: `./install.ps1 -Tr`, `./install.ps1 -Tr -Agent codex`, `./install.ps1 -Tr -Agent all`.
@@ -89,100 +171,53 @@ Windows PowerShell: `./install.ps1 -Tr`, `./install.ps1 -Tr -Agent codex`, `./in
 | `--skill NAME` / `-Skill a,b` | Yalnızca adı verilen skill'leri kurar |
 | `--prune-legacy` / `-PruneLegacy` | Artık var olmayan v1 skill'lerini kaldırır |
 | `--force` / `-Force` | Coding Orchestra'dan gelmeyen aynı adlı bir skill'in üzerine yazar |
-| `--dry-run` / `-DryRun` | Ne olacağını gösterir, hiçbir şeyi değiştirmez |
+| `--dry-run` / `-DryRun` | Hiçbir şeyi değiştirmeden ne olacağını gösterir |
 
 Kurulum script'i yalnızca Coding Orchestra skill'lerinin üzerine yazar. Aynı adla başka bir skill kuruluysa `--force` vermediğiniz sürece ona dokunmaz.
 
 ### Elle
 
-Herhangi bir skill klasörünü agent'ınızın taradığı dizine kopyalayın:
+Herhangi bir skill klasörünü agent'ınızın taradığı dizine kopyalayın. Her klasör kendi kendine yeterlidir.
 
 ```bash
 cp -r locales/tr/skills/security-audit ~/.claude/skills/     # Claude Code
 cp -r locales/tr/skills/security-audit ~/.agents/skills/     # Codex
 ```
 
-Her klasör kendi kendine yeterlidir (`SKILL.md`, `references/`, `scripts/`, `agents/openai.yaml`). İngilizce ve Türkçe setler aynı skill adlarını kullanır; bir konuma tek dil kurun.
-
-Kurulumdan sonra yeni bir oturum başlatın.
+İngilizce skill'ler `skills/` altındadır. İki dil aynı skill adlarını kullanır; bir konuma tek dil kurun.
 
 ### İsteğe bağlı: çalışma anlaşması
 
-Skill'ler ihtiyaç olduğunda yüklenir. Her oturumda geçerli olmasını istediğiniz birkaç kural için (kapsam, onay noktaları, secret'ların ele alınışı, dürüst raporlama) [`locales/tr/templates/AGENTS.md`](locales/tr/templates/AGENTS.md) içindeki bölümü projenizin `AGENTS.md` (Codex ve diğerleri) ya da `CLAUDE.md` (Claude Code) dosyasına kopyalayın. İngilizcesi: [`templates/AGENTS.md`](templates/AGENTS.md).
+Skill'ler ihtiyaç olduğunda yüklenir. Her oturumda geçerli olmasını istediğiniz birkaç kural için [`locales/tr/templates/AGENTS.md`](locales/tr/templates/AGENTS.md) içindeki bölümü projenizin `AGENTS.md` (Codex ve diğerleri) ya da `CLAUDE.md` (Claude Code) dosyasına kopyalayın. İngilizcesi: [`templates/AGENTS.md`](templates/AGENTS.md).
 
----
-
-## Kullanım
-
-İşi anlatın; agent skill'i açıklamasından seçer:
-
-```
-Bu projeyi baştan sona denetle ve bana bir yol haritası çıkar. Kapsamı onaylayana kadar kod değiştirme.
-Yayına çıkmadan önce bu uygulamada güvenlik açığı var mı bak. Sadece raporla.
-Cuma günü deploy ediyoruz. Release'i ne engelliyor?
-users.fullname kolonunu kesinti olmadan display_name olarak yeniden adlandır.
-```
-
-Ya da skill'i adıyla çağırın: Claude Code'da `/security-audit` (plugin olarak kuruluysa `/coding-orchestra-tr:security-audit`), Codex'te `$security-audit`.
-
-Yardımcı script'ler doğrudan da çalıştırılabilir; Node 18+ yeterlidir, bağımlılık yoktur:
-
-```bash
-node skills/security-audit/scripts/attack-surface.mjs path/to/project
-node skills/deployment-readiness/scripts/env-inventory.mjs path/to/project
-node skills/deployment-readiness/scripts/smoke.mjs https://staging.example.com / /login /api/health
-```
-
----
-
-## Bir skill nasıl kurulu
-
-```
-skills/security-audit/
-├── SKILL.md              # ~50 satır: sonuç, yaklaşım, sınırlar, muhakeme gerektiren kararlar
-├── references/           # yalnızca görev gerektirdiğinde yüklenir
-│   ├── stack-pitfalls.md
-│   └── report-template.md
-├── scripts/
-│   └── attack-surface.mjs
-└── agents/openai.yaml    # Codex için görüntüleme bilgileri
-```
-
-- `description`, skill'in ne yaptığını ve ne zaman kullanılacağını söyler; skill etkinleşene kadar agent'ın gördüğü tek şey budur.
-- `SKILL.md` büyük harfli kurallar yerine gerekçeleri açıklar ve yöntemi modele bırakır.
-- Frontmatter `name`, `description`, `license`, `compatibility` ve `metadata` ile sınırlıdır. Araca özgü ayarlar dışarıda kalır; böylece her agent dosyayı yükleyebilir.
-- Skill'ler birbirine adıyla atıf yapar. `production-delivery` tek başına çalışır; uzman skill'ler kuruluysa daha derine iner.
-
----
-
-## Evals
-
-```bash
-node evals/validate.mjs        # spec uyumu, boyut bütçeleri, linkler, EN/TR eşitliği, manifest'ler
-node evals/context-cost.mjs    # context ayak izi, v1 ve güncel sürüm
-```
-
-`evals/` ayrıca bir skill seçim testi (yakın ıskalar dahil 46 İngilizce ve Türkçe istek) ve bir denetim benchmark'ı içerir: 30 tohumlanmış hata barındıran, kasıtlı olarak kusurlu bir Next.js projesi; skill'siz, v1 skill'iyle ve güncel skill'le denetlenir. Nasıl çalıştırılacağı için [`evals/README.md`](evals/README.md), sayılar ve sınırları için [`evals/RESULTS.md`](evals/RESULTS.md) dosyasına bakın.
+Claude Code da Codex de yeni kurulan skill'leri kendiliğinden algılar. Bir skill görünmezse Claude Code'da plugin kurulumundan sonra `/reload-plugins` çalıştırın ya da yeni bir oturum başlatın.
 
 ---
 
 ## v1'den geçiş
 
+v1, adım adım yönetilmesi gereken modeller için yazılmış on bir uzun kural kitabıydı. v2, davranışı hâlâ değiştiren kısımları tutar, gerisini bırakır.
+
 | v1 skill | v2 |
 |---|---|
 | `production-delivery` | `production-delivery` (yeniden yazıldı) |
 | `fullstack-delivery` | `production-delivery` içine alındı |
-| `security-audit` | `security-audit` |
-| `backend-engineering` | `backend-engineering` |
-| `database-api-design` | `database-api-design` |
-| `deployment-readiness` | `deployment-readiness` |
-| `frontend-engineering` | `frontend-engineering` |
 | `ui-ux-polish` | `frontend-engineering` içine alındı (cila incelemesi) |
-| `testing-qa` | `testing-qa` |
-| `general-coding` | kaldırıldı; [çalışma anlaşmasına](locales/tr/templates/AGENTS.md) bakın |
+| `security-audit`, `backend-engineering`, `database-api-design`, `deployment-readiness`, `frontend-engineering`, `testing-qa` | aynı adlar, yeniden yazıldı |
+| `general-coding` | kaldırıldı; yerini [çalışma anlaşması](locales/tr/templates/AGENTS.md) aldı |
 | `bug-fix-refactor` | kaldırıldı; güncel modeller bunu skill olmadan yapıyor |
 
-Diğer kırıcı değişiklikler: İngilizce artık `skills/` altında ve kurulum script'inin varsayılanı; Türkçe `locales/tr/skills/` altına taşındı (`--tr`). Standart dışı `trigger:` frontmatter alanı kaldırıldı. Mevcut bir kurulumu temizlemek için kurulum script'ini `--prune-legacy` ile çalıştırın.
+Diğer kırıcı değişiklikler:
+
+- İngilizce `skills/` altına taşındı ve artık kurulum script'inin varsayılanı. Türkçe `locales/tr/skills/` altına taşındı; kurmak için `--tr` verin.
+- `trigger:` frontmatter alanı kaldırıldı.
+
+Mevcut bir kurulumu güncellemek ve kaldırılan skill'leri silmek için:
+
+```bash
+git pull
+./install.sh --tr --prune-legacy     # Windows: ./install.ps1 -Tr -PruneLegacy
+```
 
 ---
 
@@ -194,14 +229,14 @@ coding-orchestra/
 ├── locales/tr/              # Türkçe skill'ler, plugin manifest'i ve çalışma anlaşması
 ├── templates/AGENTS.md      # isteğe bağlı, her zaman açık çalışma anlaşması
 ├── .claude-plugin/          # plugin ve marketplace manifest'leri
-├── evals/                   # validator, context maliyeti, tetikleme testi, denetim benchmark'ı
+├── evals/                   # validator, context maliyeti, seçim testi, denetim benchmark'ı
 ├── install.sh, install.ps1
 └── README.md, README.tr.md, CONTRIBUTING.md, CHANGELOG.md, LICENSE
 ```
 
 ## Katkı
 
-[CONTRIBUTING.md](CONTRIBUTING.md) dosyasına bakın. Kısaca: modelin sahip olmadığı bilgiyi ekleyin, `SKILL.md` dosyasını yalın tutun, İngilizce ve Türkçeyi birlikte güncelleyin ve `node evals/validate.mjs` çalıştırın.
+[CONTRIBUTING.md](CONTRIBUTING.md) dosyasına bakın. Kısaca: modelin zaten bilmediği bilgiyi ekleyin, `SKILL.md` dosyasını yalın tutun, İngilizce ve Türkçeyi birlikte değiştirin ve her commit'ten önce `node evals/validate.mjs` çalıştırın.
 
 ## Lisans
 
