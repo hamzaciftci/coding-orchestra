@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend Engineering"
+  short_description: "Endpoints, actions, webhooks and jobs that hold up in production"
+  default_prompt: "Review the API routes and Server Actions in this project for production readiness and list what needs fixing."

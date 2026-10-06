@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Engineering"
+  short_description: "Build and polish React / Next.js UI to a professional standard"
+  default_prompt: "Review the main screens of this app for polish and give me a prioritized list of fixes."

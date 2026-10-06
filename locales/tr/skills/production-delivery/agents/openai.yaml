@@ -1,0 +1,4 @@
+interface:
+  display_name: "Production Teslimi"
+  short_description: "Tüm projeyi denetle, yol haritasında anlaş, doğrulanmış dilimlerle düzelt"
+  default_prompt: "Bu projeyi canlıya hazır olma açısından uçtan uca denetle ve bana önceliklendirilmiş bir yol haritası ver. Kapsamı onaylayana kadar kodu değiştirme."

@@ -1,54 +1,90 @@
 # Contributing to Coding Orchestra
 
-Thanks for wanting to make this better! 🎻
+Thanks for wanting to make this better. 🎻
 
-## Ways to contribute
+## What makes a good contribution
 
-- **New skills** — a well-scoped expert role that isn't covered yet.
-- **Improvements** — sharpen an existing skill's rules, checklists, or reporting format.
-- **English translations** — the skills are currently written in Turkish. High-quality English versions are the most-wanted contribution.
-- **Bug reports & ideas** — open an issue.
+A skill earns its place by changing what an agent does. Before adding a line, ask: would a current model get this wrong without it? If not, leave it out. Good material is:
+
+- **Stack-specific knowledge** that is easy to get wrong: a framework default that changed, a platform limit, a library trap.
+- **Boundaries**: what needs the user's approval, what must never be printed or run.
+- **Deliverable shapes**: report formats and checklists that make results comparable.
+- **Scripts** for work that should be done the same way every time.
+
+General engineering advice ("write clean code", "handle errors") does not belong here; models already have it.
 
 ## Skill format
 
-Every skill lives in its own folder as `skills/<name>/SKILL.md` and starts with YAML frontmatter:
+Skills follow the [Agent Skills specification](https://agentskills.io/specification). Each one is a folder:
 
-```markdown
----
-name: my-skill              # kebab-case, must match the folder name
-description: One or two sentences describing WHEN Claude should use this skill.
-trigger: /my-skill          # the slash command
----
-
-# MY_SKILL
-
-## Amaç / Purpose
-...
+```
+skills/<name>/
+├── SKILL.md              # required
+├── references/*.md       # detail loaded on demand
+├── scripts/*.mjs         # Node 18+, no dependencies, read-only by default
+└── agents/openai.yaml    # display name, short description, default prompt (Codex)
 ```
 
-Keep the section structure consistent with the existing skills:
+`SKILL.md` frontmatter:
 
-> Amaç · Rol · Çalışma Prensipleri · İş Akışı · Standartlar · AI Nasıl Davranmalı · Kritik Uyarılar · Kod Değiştirirken Uygulanacak Güvenli Sıra · Yapılacaklar · Yapılmayacaklar · Kontrol Listesi · Raporlama Formatı · Kullanım Promptu
+```yaml
+---
+name: my-skill              # lowercase, hyphens, must match the folder name
+description: What the skill does, in the third person. Use when <the situations that should trigger it>.
+license: MIT
+compatibility: Requirements and the stack it is written for.
+metadata:
+  version: "2.0.0"
+  source: coding-orchestra
+---
+```
 
-### Guidelines
+Rules the validator enforces:
 
-- `name` must be lowercase kebab-case and **match the folder name exactly**.
-- Write `description` as a *when to use* trigger — this is what Claude matches against.
-- Save `SKILL.md` as **UTF-8 without BOM** (a BOM can break frontmatter parsing).
-- Keep skills stack-relevant (Next.js / React / TypeScript / Tailwind / Node / serverless / Postgres-Supabase-Prisma / Vercel) unless proposing a deliberately general one.
-- If your skill orchestrates others (like `production-delivery`), reference them by their `/slash` names.
+- Only specification fields in frontmatter. No tool-specific keys (`allowed-tools` aside), so every agent can load the file.
+- `description` under 1024 characters, saying both what and when.
+- `SKILL.md` body under 120 lines; reference files under 200 lines, with a contents section past 100.
+- Every reference and script is mentioned in `SKILL.md`; reference files do not link to other files.
+- UTF-8 without BOM, LF line endings.
 
-## Development flow
+Style:
 
-1. Fork the repo and create a branch: `git checkout -b add-my-skill`.
-2. Add or edit files under `skills/`.
-3. Test locally: run `./install.sh` (or `./install.ps1`), restart Claude Code, and confirm the skill triggers and behaves as intended.
-4. Commit with a clear message and open a pull request describing what the skill does and why.
+- Explain why. A reason generalizes; a bare rule does not. Avoid all-caps directives.
+- Describe the outcome and the constraints, and leave the method to the model unless a fixed procedure really is required.
+- Say when to read each reference file.
+- Follow the project's conventions first: a skill should tell the agent to prefer what the codebase already does.
+
+## English and Turkish
+
+`skills/` (English) is the source of truth. `locales/tr/skills/` mirrors it file for file: the same headings, code blocks, tables and links, with prose translated. Scripts are identical in both; after changing one, run:
+
+```bash
+node evals/sync-scripts.mjs
+```
+
+A change to an English skill should come with the matching Turkish change. If you cannot write Turkish, say so in the pull request and someone will help.
+
+## Checking your change
+
+```bash
+node evals/validate.mjs        # must pass
+node evals/context-cost.mjs    # see what your change costs in context
+```
+
+If you changed a description, rerun the trigger test; if you changed `security-audit`, rerun the audit benchmark. Both are described in [`evals/README.md`](evals/README.md). A change that makes a skill longer should come with evidence that it makes results better.
+
+Scripts must never read or print secret values, write outside a path the user gave, or send requests other than the ones the user asked for.
+
+## Pull requests
+
+1. Fork and branch.
+2. Make the change in both languages and run the validator.
+3. Describe what behaviour the change is meant to produce and how you checked it.
 
 ## Code of conduct
 
-Be respectful and constructive. Assume good intent. That's it.
+Be respectful and constructive. Assume good intent.
 
 ## License
 
-By contributing, you agree that your contributions are licensed under the [MIT License](LICENSE).
+By contributing you agree that your contributions are licensed under the [MIT License](LICENSE).

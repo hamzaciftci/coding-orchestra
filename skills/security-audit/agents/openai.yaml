@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Audit"
+  short_description: "Find and close exploitable holes in your own web app"
+  default_prompt: "Run a security audit of this project and report the findings by severity. Do not change code yet."

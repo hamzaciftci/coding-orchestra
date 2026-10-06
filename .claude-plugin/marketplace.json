@@ -1,0 +1,29 @@
+{
+  "name": "coding-orchestra",
+  "owner": {
+    "name": "Hamza Çiftçi",
+    "url": "https://github.com/hamzaciftci"
+  },
+  "metadata": {
+    "description": "Agent Skills for shipping production web apps: security audit, backend, data, frontend, testing, deployment and end-to-end delivery.",
+    "version": "2.0.0"
+  },
+  "plugins": [
+    {
+      "name": "coding-orchestra",
+      "source": "./",
+      "description": "Seven Agent Skills for taking Next.js / serverless web apps to production: security audit, backend, database and API design, frontend, testing, deployment readiness and an end-to-end delivery orchestrator.",
+      "version": "2.0.0",
+      "category": "development",
+      "tags": ["security", "nextjs", "serverless", "deployment", "testing", "code-review"]
+    },
+    {
+      "name": "coding-orchestra-tr",
+      "source": "./locales/tr",
+      "description": "Coding Orchestra'nın Türkçe sürümü: Next.js / serverless web uygulamalarını production'a taşımak için yedi Agent Skill.",
+      "version": "2.0.0",
+      "category": "development",
+      "tags": ["security", "nextjs", "serverless", "deployment", "testing", "turkish"]
+    }
+  ]
+}

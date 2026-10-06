@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deploy Hazırlığı"
+  short_description: "Yayın öncesi go / no-go kontrolü ve deploy sonrası smoke test"
+  default_prompt: "Bu projenin production'a deploy edilmeye hazır olup olmadığını kontrol et ve yayını neyin engellediğini söyle."

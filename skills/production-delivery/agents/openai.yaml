@@ -1,0 +1,4 @@
+interface:
+  display_name: "Production Delivery"
+  short_description: "Audit a whole project, agree a roadmap, fix it in verified slices"
+  default_prompt: "Audit this project end to end for production readiness and give me a prioritized roadmap. Do not change code until I approve the scope."

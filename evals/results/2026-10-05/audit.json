@@ -1,0 +1,26 @@
+{
+  "note": "Security-audit benchmark on evals/fixtures/leaky-shop. Each report was produced by a Claude subagent given the task in evals/audit/task.md and, for v1/v2, the skill as a file to read. Reports were graded by reading them against evals/audit/answers.json; they were not saved verbatim. basic is out of 18, stack out of 12. tokens is the subagent's total token count.",
+  "runs": [
+    { "condition": "none", "model": "sonnet", "basic": 18, "stack": 12, "tokens": 78424 },
+    { "condition": "none", "model": "sonnet", "basic": 18, "stack": 12, "tokens": 81319 },
+    { "condition": "v1", "model": "sonnet", "basic": 18, "stack": 12, "tokens": 92271 },
+    { "condition": "v1", "model": "sonnet", "basic": 18, "stack": 12, "tokens": 90275 },
+    { "condition": "v2-draft1", "model": "sonnet", "basic": 18, "stack": 12, "tokens": 90346 },
+    { "condition": "v2-draft1", "model": "sonnet", "basic": 18, "stack": 12, "tokens": 91632 },
+
+    { "condition": "none", "model": "haiku", "basic": 15, "stack": 3, "tokens": 77676, "missed": ["idor-orders", "actions-unauth", "xss", "cron-bearer-undefined", "supabase-getsession", "user-metadata-role", "rls-missing-invoices", "rls-open-update-notes", "action-ownership", "webhook-idempotency", "password-hash-in-response", "cron-path-mismatch"] },
+    { "condition": "none", "model": "haiku", "basic": 17, "stack": 4, "tokens": 58990, "missed": ["xss", "cron-bearer-undefined", "redirect-startswith-bypass", "supabase-getsession", "rls-missing-invoices", "middleware-matcher-gap", "webhook-idempotency", "password-hash-in-response", "cron-path-mismatch"] },
+    { "condition": "v1", "model": "haiku", "basic": 18, "stack": 4, "tokens": 75880, "missed": ["cron-bearer-undefined", "supabase-getsession", "user-metadata-role", "rls-missing-invoices", "rls-open-update-notes", "webhook-idempotency", "password-hash-in-response", "cron-path-mismatch"] },
+    { "condition": "v1", "model": "haiku", "basic": 18, "stack": 3, "tokens": 73773, "missed": ["cron-bearer-undefined", "redirect-startswith-bypass", "supabase-getsession", "user-metadata-role", "rls-missing-invoices", "rls-open-update-notes", "middleware-matcher-gap", "webhook-idempotency", "cron-path-mismatch"] },
+    { "condition": "v2-draft1", "model": "haiku", "basic": 14, "stack": 6, "tokens": 76633, "missed": ["service-role-public", "cors", "xss", "cookie-flags", "supabase-getsession", "rls-missing-invoices", "rls-open-update-notes", "middleware-matcher-gap", "password-hash-in-response"] },
+    { "condition": "v2-draft1", "model": "haiku", "basic": 16, "stack": 8, "tokens": 79476, "missed": ["xss", "cookie-flags", "supabase-getsession", "action-ownership", "middleware-matcher-gap", "webhook-idempotency"] },
+    { "condition": "v2-draft2", "model": "haiku", "basic": 15, "stack": 5, "tokens": 67785, "missed": ["mass-assignment", "xss", "cookie-flags", "cron-bearer-undefined", "supabase-getsession", "user-metadata-role", "rls-missing-invoices", "middleware-matcher-gap", "webhook-idempotency", "cron-path-mismatch"] },
+    { "condition": "v2-draft2", "model": "haiku", "basic": 18, "stack": 10, "tokens": 85253, "missed": ["cron-bearer-undefined", "webhook-idempotency"] },
+    { "condition": "v2.0.0", "model": "haiku", "basic": 18, "stack": 6, "tokens": 75362, "missed": ["redirect-startswith-bypass", "supabase-getsession", "user-metadata-role", "action-ownership", "middleware-matcher-gap", "webhook-idempotency"] },
+    { "condition": "v2.0.0", "model": "haiku", "basic": 17, "stack": 10, "tokens": 76027, "missed": ["xss", "action-ownership", "middleware-matcher-gap"] },
+    { "condition": "v2.0.0", "model": "haiku", "basic": 17, "stack": 9, "tokens": 72321, "missed": ["cors", "cron-bearer-undefined", "middleware-matcher-gap", "webhook-idempotency"] }
+  ],
+  "excluded": [
+    { "condition": "v2-draft2", "model": "haiku", "basic": 16, "stack": 9, "tokens": 73877, "reason": "prompt carried an extra formatting instruction" }
+  ]
+}

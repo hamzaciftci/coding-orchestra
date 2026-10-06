@@ -52,7 +52,7 @@ d = ImageDraw.Draw(bg)
 d.line([(L, 62), (L + 300, 62)], fill=(110, 86, 207, 255), width=3)
 
 # ---- kicker ------------------------------------------------------------
-kick = "SKILLS  FOR  CLAUDE  CODE"
+kick = "AGENT  SKILLS  FOR  CLAUDE  CODE  +  CODEX"
 d.text((L, 78), kick, font=font("semibold", 27), fill=PURPLE)
 
 # ---- title -------------------------------------------------------------
@@ -60,11 +60,11 @@ d.text((L, 116), "Coding Orchestra", font=font("bold", 100), fill=WHITE)
 
 # ---- subtitle (two lines) ---------------------------------------------
 sf = font("regular", 33)
-d.text((L, 248), "11 senior-engineer skills + a master orchestrator —", font=sf, fill=MUTED)
+d.text((L, 248), "6 specialist skills + a delivery orchestrator —", font=sf, fill=MUTED)
 d.text((L, 292), "from first commit to production-ready.", font=sf, fill=MUTED)
 
 # ---- skill chips -------------------------------------------------------
-chips = ["backend", "frontend", "security", "database", "testing", "deploy", "UI / UX"]
+chips = ["security audit", "backend", "database", "frontend", "testing", "deploy", "delivery"]
 cf = font("semibold", 25)
 x, y = L, 362
 gap, ch, padx = 13, 50, 22
@@ -105,7 +105,7 @@ for dx in (L + 148, L + 372):
     d.ellipse([dx, 604, dx + 5, 609], fill=PURPLE)
 
 # ---- save --------------------------------------------------------------
-out_dir = "C:/Users/hamza/OneDrive/Masaüstü/coding-orchestra/.github"
+out_dir = os.path.dirname(os.path.abspath(__file__))
 os.makedirs(out_dir, exist_ok=True)
 out = out_dir + "/social-preview.png"
 bg.convert("RGB").save(out, "PNG")

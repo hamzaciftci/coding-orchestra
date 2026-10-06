@@ -1,0 +1,4 @@
+interface:
+  display_name: "Güvenlik Denetimi"
+  short_description: "Kendi web uygulamandaki istismar edilebilir açıkları bul ve kapat"
+  default_prompt: "Bu projede bir güvenlik denetimi yap ve bulguları önem derecesine göre raporla. Henüz kodu değiştirme."

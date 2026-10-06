@@ -1,149 +1,47 @@
 ---
 name: production-delivery
-description: Master orchestrator running the full 11-phase end-to-end production-ready delivery using all coding-orchestra skills - analyze, audit backend frontend security db deploy uiux, plan tests, apply safely, final report. Use for full end-to-end delivery of a project.
-trigger: /production-delivery
+description: Runs an end-to-end production-readiness engagement on a web project, with an audit across security, backend, data, frontend, tests and deployment, a prioritized roadmap, fixes delivered in verified vertical slices and a final go / no-go report. Use when the user wants a whole project finished, taken over, audited end to end or made production-ready, as opposed to one specific change.
+license: MIT
+compatibility: Works on its own. Goes deeper when the other Coding Orchestra skills (security-audit, backend-engineering, database-api-design, frontend-engineering, testing-qa, deployment-readiness) are installed.
+metadata:
+  version: "2.0.0"
+  source: coding-orchestra
 ---
 
-# MASTER_PROMPT — Production Delivery Orchestrator
+# Production delivery
 
-> Bu skill, projeyi **uçtan uca production-ready** hale getiren ana orkestratördür. Her fazda ilgili uzman skill'i (`/slash` komutu) devreye alır. Çalıştırmak için `/production-delivery` yaz; istersen `{PROJE}` ve `{HEDEF}` bağlamını ekle.
+This skill coordinates a whole-project engagement: find out what state the project is really in, agree on what matters, fix it in an order that keeps the project working, and say honestly whether it is ready. It conducts; the specialist skills hold the domain depth.
 
----
+## Shape of the engagement
 
-## 0. Rol ve Zihniyet
-Sen kıdemli bir **Full-Stack Delivery Lead**'sin. Emrindeki uzman skill'leri duruma göre devreye alırsın (her biri ayrıca `/slash` ile de çağrılabilir):
-- **`/general-coding`** — her işin temel mühendislik disiplini (her zaman aktif)
-- **`/backend-engineering`** — API, auth, DB erişimi, job, webhook
-- **`/frontend-engineering`** — component, state, form, a11y, performans
-- **`/fullstack-delivery`** — denetim, roadmap, uçtan uca teslim
-- **`/security-audit`** — açık bul & kapat
-- **`/bug-fix-refactor`** — kök sebep & güvenli refactor
-- **`/database-api-design`** — şema, migration, contract
-- **`/deployment-readiness`** — build, env, deploy, monitoring
-- **`/ui-ux-polish`** — profesyonel görsel kalite
-- **`/testing-qa`** — test piramidi, güvenlik regresyonu, smoke test
+**1. Understand.** Learn what the product is for and who uses it, the stack, and how it is deployed. Run the project's own checks (install, typecheck, lint, tests, build) and record what is already broken before you touch anything. Identify the main user flows; if they are not clear from the code, ask.
 
-Her fazda ilgili skill'in kurallarını uygula. Çelişki olursa öncelik: **Güvenlik > Veri bütünlüğü > Doğruluk > Uyumluluk > Performans > Cila.**
+**2. Audit.** Look at the project through each lens in [references/audit-lenses.md](references/audit-lenses.md): security, backend, data and contracts, frontend, tests, deployment. For each lens, use the matching specialist skill when it is installed; the lens file says what to look for when it is not. The lenses are independent and mostly read-only, so if your environment supports subagents, run them in parallel with one lens each and have each return findings with file references. Check surprising or severe findings yourself before they go in the report. Without subagents, go through them in priority order.
 
-## 1. Temel Davranış Kuralları (tüm fazlarda geçerli)
-- **Önce anla, sonra dokun.** Projeyi ve etki alanını anlamadan kod yazma.
-- **Güvenli sıra her değişiklikte:** Oku → Analiz et → Planla → Küçük değişiklik → Test et → Raporla.
-- **Kanıta dayan.** "Varsayıyorum" ile "kodda doğruladım"ı ayır; dosya:satır göster.
-- **Minimal ve tersine çevrilebilir değişiklik.** Gereksiz büyük rewrite yok.
-- **Çalışan yapıyı bozma.** Contract, akış ve davranışı sessizce değiştirme.
-- **Her fazın sonunda raporla.** Test edilmeyeni "test edildi" deme.
-- **Kapsam kararlarında dur.** Büyük/riskli/destructive işlemler (migration, veri silme, mimari değişiklik, secret rotate) için önce plan sun.
+Two project-level checks belong to no single lens: a feature inventory (what exists, what is half-built, what is missing for the stated goal) and a frontend-to-backend contract check (every client call matched to a real endpoint, with field names, types, auth and status codes compared).
 
-## 2. Uçtan Uca İş Akışı (sırayla uygula)
+**3. Roadmap, then stop.** Turn the findings into one prioritized list using the scale in [references/templates.md](references/templates.md): Blocker, Critical, Major, Minor, Polish. Each item has evidence, impact and rough size. Present it and wait for the user to confirm scope before changing code. If the user asked for an audit only, the engagement ends here with the report.
 
-### FAZ 1 — Tam Proje Analizi  `[/fullstack-delivery + /general-coding]`
-- Stack, framework sürümleri, klasör yapısı, DB, auth, deployment hedefini çıkar.
-- `install → typecheck → lint → test → build` çalıştır; mevcut kırıkları kaydet.
-- Amaç ve ana kullanıcı akışlarını belirle.
-- **Çıktı:** Proje özeti + tech stack + mevcut sağlık durumu.
+**4. Deliver in vertical slices.** Take the approved items most severe first. Finish one thing completely (schema, API, UI, test) before starting the next, and leave the project building and passing its checks after every slice. After each slice, report briefly what changed, how it was verified and what is next. This keeps the user able to stop at any point with a working project.
 
-### FAZ 2 — Eksik & Risk Raporu  `[/fullstack-delivery]`
-- Özellik envanteri (var/yarım/eksik), teknik borç kaydı, frontend/backend uyum matrisi.
-- **Çıktı:** Önceliklendirilmiş bulgu listesi (Blocker → Critical → Major → Minor → Polish).
+**5. Release verdict.** Run the release checklist from the `deployment-readiness` skill, then give the final report: ready, ready with conditions, or not ready, with what was done, what remains and how to roll back.
 
-### FAZ 3 — Backend Kontrolü  `[/backend-engineering + /database-api-design]`
-- Her endpoint: rate limit → authn → authz(IDOR) → validation → iş mantığı → standart response.
-- Transaction, idempotency, cron/webhook koruması, serverless uyumluluğu, env doğrulama.
-- **Çıktı:** Backend bulguları + düzeltme planı.
+## Priorities when goals conflict
 
-### FAZ 4 — Frontend Kontrolü  `[/frontend-engineering + /ui-ux-polish]`
-- Component mimarisi, state, form+validation, 4 durum ekranı, responsive, a11y, dark mode, performans.
-- Görsel tutarlılık ve microcopy kalitesi.
-- **Çıktı:** Frontend bulguları + düzeltme/cila planı.
+Security, then data integrity, then correctness, then compatibility with existing clients, then performance, then polish. A security item is never downgraded to make a roadmap look shorter.
 
-### FAZ 5 — Güvenlik Denetimi  `[/security-audit]`
-- Saldırı yüzeyini haritala; authn/authz/IDOR/injection/XSS/CSRF/SSRF/traversal/upload/rate-limit/secret/CORS/redirect/webhook/cron/headers/cookie tara.
-- **Çıktı:** Her açık için 8 maddelik bulgu-düzeltme raporu + özet tablo (risk seviyeli).
+## Where to stop and ask
 
-### FAZ 6 — Veritabanı & API Yapısı  `[/database-api-design]`
-- Şema ↔ ORM ↔ tip senkronu, kısıt/index, migration güvenliği (expand/contract), DTO/whitelist, pagination, geriye uyumluluk.
-- **Çıktı:** Şema/contract bulguları + migration planı (geri alma dahil).
+Wait for explicit approval before: migrations or anything that deletes or rewrites data; changes to authentication, CORS, CSP or cookie behaviour; breaking an API contract; large refactors, architecture changes or new infrastructure; anything that needs a secret rotated; deploying or touching production. Outside these, proceed within the approved roadmap without asking for each step.
 
-### FAZ 7 — Deployment Riskleri  `[/deployment-readiness]`
-- Build geçidi, env/secret denetimi, edge/serverless uyumluluğu, cron/webhook, monitoring/health, security headers, SEO/PWA, cache invalidation.
-- **Çıktı:** Release readiness bulguları + rollback planı.
+Do not respond to a half-built project by rewriting it. Keep what works and improve it incrementally unless the user decides otherwise with the trade-off in front of them.
 
-### FAZ 8 — UI/UX Kalitesi  `[/ui-ux-polish]`
-- Renk/spacing/tipografi sistemi, hiyerarşi, durum ekranları, form/buton state'leri, mobil, güven veren metinler, landing kalitesi.
-- **Çıktı:** Cila planı ve öncelikli ekranlar.
+## Evidence
 
-### FAZ 9 — Test Planı  `[/testing-qa]`
-- Test piramidi; kritik yol E2E; API başarı/hata/yetkisiz; auth/rol/IDOR; güvenlik regresyonu; edge & durum ekranı testleri.
-- **Çıktı:** Test planı + kapsam boşlukları.
+Findings cite files and lines. Distinguish what you verified (read in code, ran and observed) from what you are inferring, and never report a check as passed that was not run. Do not print secret values or open real env files; names and locations are enough. If a lens turned up nothing, say that instead of padding the report.
 
-### FAZ 10 — Güvenli Uygulama (dikey dilimler)  `[/bug-fix-refactor + ilgili faz skill'leri]`
-- Blocker/Critical'dan başla. Her özelliği DB → API → UI → Test olarak **komple** bitir.
-- Her değişiklikte güvenli sırayı uygula; her adımda build + test yeşil.
-- **Her dilim sonrası ara rapor ver** (skill raporlama formatıyla).
+## Long engagements
 
-### FAZ 11 — Production-Ready Final  `[/deployment-readiness + /testing-qa]`
-- Release checklist'ini (`/deployment-readiness`) tamamla; deploy sonrası smoke test (`/testing-qa`).
-- **Çıktı:** Konsolide final rapor (aşağıdaki format).
+This work often outlives one session. Once a roadmap is approved, offer to keep it in a file in the repository (for example `docs/production-readiness.md`) with item status, and update it after each slice, so the work can be resumed without redoing the audit.
 
-## 3. Onay Noktaları (dur ve plan sun)
-Şunları uygulamadan önce plan sun ve onay bekle:
-- DB migration / veri silme / şema değişikliği
-- Auth, CORS, CSP gibi güvenlik davranışını değiştiren düzeltmeler
-- API contract'ında breaking change
-- Büyük refactor / mimari değişiklik / yeni bağımlılık ailesi
-- Secret rotate gerektiren durumlar
-
-## 4. Her Faz / Dilim Sonu Rapor Formatı
-1. Yapılan analiz — 2. Bulunan problemler — 3. Yapılan değişiklikler — 4. Dokunulan dosyalar (path:line) — 5. Neden bu çözüm — 6. Güvenlik etkisi — 7. Performans etkisi — 8. Test sonucu (gerçek çıktı) — 9. Kalan riskler — 10. Sonraki öneriler
-
-## 5. Final Production-Ready Rapor Formatı
-- **Genel durum:** Production'a hazır mı? (Evet / Koşullu / Hayır + gerekçe)
-- **Yapılan işler özeti:** faz faz
-- **Kapatılan güvenlik açıkları:** risk seviyeleriyle özet tablo
-- **Frontend/Backend/DB/Deploy/UX/Test durumu:** her biri için ✅/🟡/❌
-- **Release checklist:** madde madde işaretli
-- **Smoke test sonuçları:** kritik akışlar
-- **Kalan bilinen riskler:** açık/kabul edilen
-- **Sonraki öneriler:** önceliklendirilmiş yol haritası
-- **Rollback planı:** nasıl geri alınır
-
----
-
-## Hazır Kullanım Promptları
-
-**Tam uçtan uca teslim:**
-```
-/production-delivery
-Projeyi ({PROJE}) 11 fazlık akışla uçtan uca production-ready hale getir.
-Önce Faz 1-9 denetimlerini yapıp önceliklendirilmiş roadmap sun; onayımdan sonra
-Faz 10'da dikey dilimlerle uygula, her dilim sonrası ara rapor ver, Faz 11'de final rapor sun.
-Onay noktalarında durup plan sunmayı unutma.
-```
-
-**Tek skill hedefli örnekler:**
-```
-/security-audit
-Bu projeyi analiz et ve tüm Critical/High açıkları kapat.
-```
-```
-/frontend-engineering
-Bu projeyi profesyonel hale getir.
-```
-```
-/deployment-readiness
-Bu projeyi canlıya hazırla.
-```
-```
-/bug-fix-refactor
-Bu hatayı kök sebebiyle çöz ve regresyon testi ekle.
-```
-```
-/database-api-design
-Bu özellik için şema + API contract tasarla.
-```
-
-**Sadece denetim (uygulama yok):**
-```
-/production-delivery
-Faz 1-9'u uygula, hiçbir kod değiştirme; sadece önceliklendirilmiş bulgu + roadmap raporu ver.
-```
+Report formats for the roadmap, slice updates and the final report are in [references/templates.md](references/templates.md).

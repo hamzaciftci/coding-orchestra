@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deployment Readiness"
+  short_description: "Go / no-go check before shipping, plus post-deploy smoke test"
+  default_prompt: "Check whether this project is ready to deploy to production and tell me what blocks the release."

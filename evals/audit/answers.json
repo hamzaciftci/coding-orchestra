@@ -1,0 +1,44 @@
+{
+  "fixture": "evals/fixtures/leaky-shop",
+  "note": "Seeded flaws. tier=basic: standard classes any careful reviewer finds. tier=stack: flaws that need knowledge of how Next.js, serverless, Supabase or Stripe behave. Patterns are case-insensitive regular expressions matched against the report text; an issue counts as found if any pattern matches.",
+  "issues": [
+    { "id": "jwt-decode", "tier": "basic", "where": "lib/auth.ts", "title": "Session read with jwt.decode, signature never verified", "match": ["jwt\\.decode", "decode\\(\\)", "signature[^.]{0,60}(never|not|without)[^.]{0,20}(verif|check)", "(never|not) verif[^.]{0,40}(jwt|token|session)"] },
+    { "id": "fallback-secret", "tier": "basic", "where": "lib/auth.ts", "title": "Fallback JWT secret", "match": ["dev-secret"] },
+    { "id": "admin-unauth", "tier": "basic", "where": "app/api/admin/users/route.ts", "title": "Admin route without authentication", "match": ["admin/users", "admin (api|endpoint|route)[^.]{0,80}(no|without|unauthenticated|lacks)"] },
+    { "id": "sql-injection", "tier": "basic", "where": "app/api/products/route.ts", "title": "SQL injection through sort parameter", "match": ["queryRawUnsafe", "SQL injection"] },
+    { "id": "webhook-unsigned", "tier": "basic", "where": "app/api/webhooks/stripe/route.ts", "title": "Stripe webhook without signature verification", "match": ["constructEvent", "webhook[^.]{0,120}signature", "unsigned (event|webhook)"] },
+    { "id": "service-role-public", "tier": "basic", "where": "lib/supabase.ts", "title": "Service-role key behind NEXT_PUBLIC_ in a client module", "match": ["SERVICE_ROLE", "service[- ]role key"] },
+    { "id": "mass-assignment", "tier": "basic", "where": "app/api/profile/route.ts", "title": "Request body passed to update as data", "match": ["mass[- ]assignment", "bulk assignment", "data:\\s*body"] },
+    { "id": "idor-orders", "tier": "basic", "where": "app/api/orders/[id]/route.ts", "title": "Order loaded by id without ownership", "match": ["orders/\\[id\\]", "IDOR[^.]{0,80}order", "order[^.]{0,80}(IDOR|ownership|belongs)"] },
+    { "id": "actions-unauth", "tier": "basic", "where": "app/actions/projects.ts", "title": "deleteProject / renameProject have no session check", "match": ["deleteProject", "renameProject"] },
+    { "id": "ssrf", "tier": "basic", "where": "app/api/preview/route.ts", "title": "Server-side fetch of user URL", "match": ["SSRF", "server-side request forgery"] },
+    { "id": "open-redirect", "tier": "basic", "where": "app/api/auth/callback/route.ts", "title": "Unvalidated redirect target", "match": ["open redirect"] },
+    { "id": "cors", "tier": "basic", "where": "next.config.mjs", "title": "Wildcard CORS with credentials", "match": ["CORS", "Access-Control-Allow"] },
+    { "id": "cron-cleanup-unauth", "tier": "basic", "where": "app/api/cron/cleanup/route.ts", "title": "Destructive cron route without secret", "match": ["cron/cleanup", "cleanup[^.]{0,80}(no auth|unauthenticated|unprotected|public|no secret)", "unauthenticated[^.]{0,40}cron"] },
+    { "id": "weak-password-hash", "tier": "basic", "where": "app/api/auth/login/route.ts", "title": "Unsalted SHA-256 passwords", "match": ["SHA-?256"] },
+    { "id": "stack-leak", "tier": "basic", "where": "app/api/profile/route.ts", "title": "Stack trace in error response", "match": ["stack[- ]trace", "err(or)?\\.stack", "leaks? (the )?stack"] },
+    { "id": "xss", "tier": "basic", "where": "app/dashboard/page.tsx", "title": "dangerouslySetInnerHTML with stored value", "match": ["dangerouslySetInnerHTML", "stored XSS"] },
+    { "id": "cookie-flags", "tier": "basic", "where": "app/api/auth/login/route.ts", "title": "Session cookie without flags", "match": ["httpOnly"] },
+    { "id": "user-enumeration", "tier": "basic", "where": "app/api/auth/login/route.ts", "title": "Different responses reveal whether an account exists", "match": ["enumerat"] },
+
+    { "id": "ratelimit-serverless", "tier": "stack", "where": "lib/rate-limit.ts", "title": "In-memory rate limit is per instance on serverless", "match": ["in-memory[^.]{0,200}(serverless|instance|cold start)", "(serverless|instance)[^.]{0,200}in-memory", "per[- ]instance", "(across|multiple|between)[^.]{0,30}instances"] },
+    { "id": "cron-bearer-undefined", "tier": "stack", "where": "app/api/cron/digest/route.ts", "title": "Check passes with 'Bearer undefined' when CRON_SECRET is unset", "match": ["Bearer undefined", "fails? open", "CRON_SECRET[^.]{0,120}(unset|not set|undefined|missing|empty)[^.]{0,200}(bypass|anyone|pass|send|match|literal)"] },
+    { "id": "redirect-startswith-bypass", "tier": "stack", "where": "app/api/auth/return/route.ts", "title": "startsWith('/') check bypassed by //host", "match": ["auth/return[^\\n]{0,400}(//|bypass|startsWith)", "startsWith[^\\n]{0,200}(//|bypass)", "//evil"] },
+    { "id": "supabase-getsession", "tier": "stack", "where": "lib/supabase-server.ts", "title": "auth.getSession() trusted on the server instead of getUser()", "match": ["getUser\\(\\)", "getSession\\(\\)[^\\n]{0,300}(revalidat|not valid|unverified|without (re)?valid|does not verify|trusts? the cookie)"] },
+    { "id": "user-metadata-role", "tier": "stack", "where": "lib/supabase-server.ts", "title": "Role read from user-editable user_metadata", "match": ["user_metadata", "user[- ]metadata"] },
+    { "id": "rls-missing-invoices", "tier": "stack", "where": "supabase/migrations/0001_init.sql", "title": "invoices table without row level security", "match": ["invoices[^\\n]{0,200}(RLS|row[- ]level)", "(RLS|row[- ]level)[^\\n]{0,200}invoices"] },
+    { "id": "rls-open-update-notes", "tier": "stack", "where": "supabase/migrations/0001_init.sql", "title": "notes update policy using (true)", "match": ["using\\s*\\(true\\)", "notes[^\\n]{0,200}(update policy|policy)[^\\n]{0,200}(open|anyone|any user|permissive)"] },
+    { "id": "action-ownership", "tier": "stack", "where": "app/actions/projects.ts", "title": "archiveProject checks session but not ownership", "match": ["archiveProject"] },
+    { "id": "middleware-matcher-gap", "tier": "stack", "where": "middleware.ts", "title": "Matcher covers /dashboard only; cookie presence only", "match": ["matcher", "middleware[^\\n]{0,200}(only|just)[^\\n]{0,80}(/dashboard|cookie (exists|presence|is present))"] },
+    { "id": "webhook-idempotency", "tier": "stack", "where": "app/api/webhooks/stripe/route.ts", "title": "Webhook retry or replay credits twice", "match": ["idempoten", "replay", "dedup", "event[. ]id"] },
+    { "id": "password-hash-in-response", "tier": "stack", "where": "app/api/orders/[id]/route.ts, app/api/admin/users/route.ts", "title": "passwordHash returned through include / missing select", "match": ["passwordHash", "password hash(es)?[^.]{0,80}(leak|return|expos|dump|response)"] },
+    { "id": "cron-path-mismatch", "tier": "stack", "where": "vercel.json", "title": "Scheduled path does not match the route", "match": ["clean-up"] }
+  ],
+  "qualities": [
+    { "id": "confidence-labels", "title": "Separates confirmed findings from ones needing verification", "match": ["needs verification", "confirmed", "doğrulama gerekli"] },
+    { "id": "rotation-not-removal", "title": "Says a leaked key must be rotated, not just removed", "match": ["rotat"] },
+    { "id": "not-covered", "title": "States what was not checked", "match": ["not covered", "not verified", "could not (check|verify|run)", "not assess", "out of scope", "did not run"] },
+    { "id": "user-only-actions", "title": "Lists actions only the owner can take", "match": ["only you can", "actions? (for|only) you", "you (must|need to|should) rotate", "secrets to rotate"] },
+    { "id": "framework-advisories", "title": "Checks framework version against known advisories", "match": ["CVE-20\\d\\d-\\d+"] }
+  ]
+}

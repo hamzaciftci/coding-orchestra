@@ -1,0 +1,13 @@
+{
+  "name": "coding-orchestra",
+  "version": "2.0.0",
+  "description": "Seven Agent Skills for taking Next.js / serverless web apps to production: security audit, backend, database and API design, frontend, testing, deployment readiness and an end-to-end delivery orchestrator.",
+  "author": {
+    "name": "Hamza Çiftçi",
+    "url": "https://github.com/hamzaciftci"
+  },
+  "homepage": "https://github.com/hamzaciftci/coding-orchestra",
+  "repository": "https://github.com/hamzaciftci/coding-orchestra",
+  "license": "MIT",
+  "keywords": ["agent-skills", "security-audit", "nextjs", "serverless", "supabase", "prisma", "deployment", "testing"]
+}
